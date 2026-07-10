@@ -7,6 +7,7 @@ export const authConfig = {
   },
   providers: [],
   trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "super-secret-key-change-in-production",
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
