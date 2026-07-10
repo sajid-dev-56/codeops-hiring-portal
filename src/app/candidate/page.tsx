@@ -116,7 +116,7 @@ export default async function CandidateDashboardPage() {
                       <div key={stage.id} className="flex sm:flex-col items-center sm:text-center group relative">
                         {/* Mobile line */}
                         {idx !== STAGES.length - 1 && (
-                          <div className={`absolute left-6 top-12 bottom-[-1.5rem] w-1 sm:hidden ${isCompleted ? 'bg-primary-500 shadow-[0_0_10px_rgba(var(--primary-500),0.5)]' : 'bg-surface-100'}`}></div>
+                          <div className={`absolute left-[22px] top-12 bottom-[-1rem] w-1 sm:hidden ${isCompleted ? 'bg-primary-500 shadow-[0_0_10px_rgba(var(--primary-500),0.5)]' : 'bg-surface-100'}`}></div>
                         )}
                         
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center border-4 z-10 bg-white transition-all duration-500 ${
@@ -139,7 +139,7 @@ export default async function CandidateDashboardPage() {
           </div>
 
           {/* ChatBox Wrapper */}
-          <div className="bg-white rounded-3xl shadow-xl shadow-surface-200/40 border border-surface-100 overflow-hidden flex flex-col h-[550px]">
+          <div className="bg-white rounded-3xl shadow-xl shadow-surface-200/40 border border-surface-100 overflow-hidden flex flex-col h-[400px] sm:h-[550px]">
             <div className="px-6 py-5 border-b border-surface-100 bg-surface-50/80 flex justify-between items-center backdrop-blur-md">
               <h3 className="text-lg font-bold text-surface-900 flex items-center gap-2">
                 <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

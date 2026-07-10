@@ -74,7 +74,7 @@ export function ChatBox({ candidateId, currentRole }: ChatBoxProps) {
   }
 
   return (
-    <div className="flex flex-col h-[500px] bg-white border border-surface-200 rounded-xl overflow-hidden shadow-sm">
+    <div className="flex flex-col h-full min-h-[400px] bg-white border border-surface-200 rounded-xl overflow-hidden shadow-sm">
       <div className="px-6 py-4 border-b border-surface-200 bg-surface-50/50">
         <h3 className="text-lg font-medium text-surface-900">Messages</h3>
       </div>

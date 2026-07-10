@@ -95,7 +95,7 @@ export default function KanbanBoard({
           return (
             <div
               key={stage.key}
-              className="flex-shrink-0 w-72"
+              className="flex-shrink-0 w-[85vw] sm:w-72"
             >
               {/* Column Header */}
               <div className="flex items-center gap-2 mb-3 px-1">

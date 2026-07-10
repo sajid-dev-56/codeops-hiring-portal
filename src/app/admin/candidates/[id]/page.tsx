@@ -195,8 +195,8 @@ export default async function CandidateDetailPage({ params }: Props) {
               <span className="text-brand-600">✨</span> AI Screening Analysis
             </h3>
             <div className="bg-gradient-to-r from-brand-50 to-white border border-brand-100 rounded-xl p-5">
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`text-2xl font-bold ${candidate.aiScore >= 80 ? 'text-green-600' : candidate.aiScore >= 60 ? 'text-amber-600' : 'text-red-600'}`}>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+                <div className={`text-2xl font-bold flex-shrink-0 ${candidate.aiScore >= 80 ? 'text-green-600' : candidate.aiScore >= 60 ? 'text-amber-600' : 'text-red-600'}`}>
                   {candidate.aiScore}/100
                 </div>
                 <div className="flex-1 text-sm text-surface-700">
