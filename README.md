@@ -11,8 +11,7 @@
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#architecture">Architecture</a> •
   <a href="#getting-started">Getting Started</a> •
-  <a href="#environment-variables">Environment Variables</a> •
-  <a href="#handover">Developer Handover</a>
+  <a href="#environment-variables">Environment Variables</a>
 </p>
 
 ---
@@ -67,7 +66,6 @@
 │   ├── components/          # Reusable React components (UI, Forms, Modals)
 │   ├── lib/                 # Core utilities (Auth, Prisma client, R2 logic, AI logic)
 │   └── types/               # Global TypeScript definitions
-├── HANDOVER.md              # Detailed backend developer documentation
 └── .env.example             # Environment variable templates
 ```
 
@@ -146,12 +144,6 @@ ADMIN_NOTIFICATION_EMAIL="admin-alerts@gmail.com"
 # AI Integration
 GEMINI_API_KEY="your-google-gemini-api-key"
 ```
-
----
-
-## 📜 Developer Handover & Contributing
-
-For developers taking over or contributing to this project, please read the **`HANDOVER.md`** file located in the root directory. It contains critical information regarding open tasks, known network/CORS issues with R2, and exact steps for production deployment.
 
 ## 📄 License
 
