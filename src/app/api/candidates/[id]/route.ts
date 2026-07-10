@@ -5,15 +5,15 @@ import { supabaseAdmin } from "@/lib/supabase-storage";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
+    const { id } = await params;
     if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const candidateId = params.id;
+    const candidateId = id;
 
     // Get the candidate to check if they have a CV
     const candidate = await prisma.candidate.findUnique({

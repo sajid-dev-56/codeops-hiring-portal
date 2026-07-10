@@ -185,6 +185,7 @@ export default async function CandidateDetailPage({ params }: Props) {
             decision: i.decision,
             notes: i.notes,
           }))}
+          customAnswers={(candidate.customAnswers as Record<string, string>) || undefined}
         />
 
         {/* AI Screening Summary */}

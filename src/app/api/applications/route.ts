@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         coverLetter: data.coverLetter || null,
         cvFileKey: data.cvFileKey || null,
         cvFileUrl: data.cvFileUrl || null,
-        customAnswers: data.customAnswers || {},
+        customAnswers: data.customAnswers ? (data.customAnswers as any) : {},
         stage: "APPLIED",
         source: "Website",
       },

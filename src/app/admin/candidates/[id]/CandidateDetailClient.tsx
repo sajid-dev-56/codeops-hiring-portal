@@ -34,11 +34,13 @@ export default function CandidateDetailClient({
   cvFileKey,
   serializedNotes,
   serializedInterviews,
+  customAnswers,
 }: {
   candidateId: string;
   cvFileKey: string | null;
   serializedNotes: NoteData[];
   serializedInterviews: InterviewData[];
+  customAnswers?: Record<string, string>;
 }) {
   const router = useRouter();
   const [downloading, setDownloading] = useState(false);
@@ -163,7 +165,7 @@ export default function CandidateDetailClient({
       </div>
 
       {/* Custom Questions / Application Details */}
-      {candidate.customAnswers && Object.keys(candidate.customAnswers as Record<string, string>).length > 0 && (
+      {customAnswers && Object.keys(customAnswers).length > 0 && (
         <div className="bg-white rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8">
           <h2 className="text-lg font-bold text-surface-900 mb-6 flex items-center gap-2">
             <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -172,7 +174,7 @@ export default function CandidateDetailClient({
             Application Responses
           </h2>
           <div className="space-y-6">
-            {Object.entries(candidate.customAnswers as Record<string, string>).map(([question, answer], idx) => (
+            {Object.entries(customAnswers).map(([question, answer], idx) => (
               <div key={idx}>
                 <h3 className="text-sm font-semibold text-surface-700 mb-2">{question}</h3>
                 <p className="text-surface-600 bg-surface-50 p-4 rounded-xl text-sm whitespace-pre-wrap leading-relaxed">

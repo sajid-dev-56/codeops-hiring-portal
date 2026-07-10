@@ -11,7 +11,6 @@ type FormState = {
   phone: string;
   portfolioUrl: string;
   expectedSalary: string;
-  expectedSalary: string;
   noticePeriod: string;
   coverLetter: string;
   customAnswers: Record<string, string>;
@@ -37,7 +36,6 @@ export default function ApplyPage() {
     phone: "",
     portfolioUrl: "",
     expectedSalary: "",
-    noticePeriod: "",
     noticePeriod: "",
     coverLetter: "",
     customAnswers: {},
