@@ -107,8 +107,8 @@ export async function POST(request: NextRequest) {
       jobTitle: job.title,
     }).catch(console.error);
 
-    // Trigger AI Resume Screening (non-blocking)
-    analyzeCandidateApplication(candidate.id).catch(console.error);
+    // (Manual) Admin will trigger AI Resume Screening from the dashboard.
+    // analyzeCandidateApplication(candidate.id).catch(console.error);
 
     return NextResponse.json({ success: true, candidateId: candidate.id });
   } catch (error) {
