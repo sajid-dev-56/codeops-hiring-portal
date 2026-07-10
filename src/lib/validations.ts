@@ -38,7 +38,7 @@ export const applicationSchema = z.object({
   cvFileKey: z.string().optional().or(z.literal("")),
   cvFileUrl: z.string().optional().or(z.literal("")),
   jobId: z.string().min(1, "Job ID is required"),
-  customAnswers: z.record(z.string()).optional(),
+  customAnswers: z.record(z.string(), z.string()).optional(),
   // Honeypot field - should always be empty
   website: z.string().max(0, "Bot detected").optional().or(z.literal("")),
 });
