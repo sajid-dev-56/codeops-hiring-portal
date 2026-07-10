@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
             </p>
           </div>
         `,
-      }).catch(console.error); // Do not block on email sending
+      });
     }
 
     return NextResponse.json({ message });

@@ -6,6 +6,7 @@ export const authConfig = {
     verifyRequest: "/candidate/verify-request",
   },
   providers: [],
+  trustHost: true,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

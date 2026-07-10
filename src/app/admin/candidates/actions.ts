@@ -22,12 +22,12 @@ export async function updateCandidateStage(candidateId: string, stage: string) {
       data: { stage: stage as never },
     });
 
-    sendStageChangeEmail({
+    await sendStageChangeEmail({
       candidateName: candidate.name,
       candidateEmail: candidate.email,
       jobTitle: candidate.job.title,
       newStage: stage,
-    }).catch(console.error);
+    });
   }
 
   revalidatePath("/admin/candidates");

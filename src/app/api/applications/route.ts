@@ -93,20 +93,20 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send email notification to Admin (non-blocking)
-    sendNewApplicationEmail({
-      candidateName: candidate.name,
-      candidateEmail: candidate.email,
-      jobTitle: job.title,
-      jobDepartment: job.department,
-    }).catch(console.error);
-
-    // Send confirmation email to Candidate (non-blocking)
-    sendCandidateConfirmationEmail({
-      candidateName: candidate.name,
-      candidateEmail: candidate.email,
-      jobTitle: job.title,
-    }).catch(console.error);
+    // Send emails concurrently and wait for them to finish so Vercel doesn't kill the process
+    await Promise.allSettled([
+      sendNewApplicationEmail({
+        candidateName: candidate.name,
+        candidateEmail: candidate.email,
+        jobTitle: job.title,
+        jobDepartment: job.department,
+      }),
+      sendCandidateConfirmationEmail({
+        candidateName: candidate.name,
+        candidateEmail: candidate.email,
+        jobTitle: job.title,
+      })
+    ]);
 
     // (Manual) Admin will trigger AI Resume Screening from the dashboard.
     // analyzeCandidateApplication(candidate.id).catch(console.error);
