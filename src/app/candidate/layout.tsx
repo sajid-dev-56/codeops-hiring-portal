@@ -1,7 +1,7 @@
 import { auth, signOut } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 
 export default async function CandidateLayout({
   children,
@@ -12,35 +12,39 @@ export default async function CandidateLayout({
   if (!session?.user) redirect("/candidate/login");
 
   return (
-    <div className="min-h-screen bg-surface-50 text-surface-900 flex flex-col">
-      <nav className="bg-white border-b border-surface-200">
+    <div className="min-h-screen bg-surface-50 text-surface-900 flex flex-col font-sans selection:bg-primary-500/30">
+      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-surface-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <span className="font-bold text-xl text-brand-600">CodeOps Hiring</span>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/candidate"
-                  className="border-brand-500 text-surface-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  Dashboard
-                </Link>
-              </div>
+          <div className="flex justify-between h-20 items-center">
+            <div className="flex items-center gap-8">
+              <Link href="/candidate" className="flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:scale-105 transition-transform duration-300">
+                  <span className="font-black text-white text-lg tracking-tighter">CO</span>
+                </div>
+                <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-surface-900 to-surface-700">
+                  CodeOps
+                </span>
+              </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-              <span className="text-sm text-surface-500">{session.user.email}</span>
+            
+            <div className="flex items-center gap-6">
+              <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-surface-100/50 backdrop-blur-md rounded-full border border-surface-200">
+                <div className="w-7 h-7 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center">
+                  <User className="w-4 h-4" />
+                </div>
+                <span className="text-sm font-semibold text-surface-700">{session.user.email}</span>
+              </div>
+              
               <form action={async () => {
                 "use server";
                 await signOut({ redirectTo: "/" });
               }}>
                 <button
                   type="submit"
-                  className="p-2 text-surface-400 hover:text-surface-500 transition-colors"
-                  title="Log out"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-surface-500 hover:text-red-600 hover:bg-red-50 font-medium transition-all"
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">Log out</span>
                 </button>
               </form>
             </div>
@@ -48,7 +52,7 @@ export default async function CandidateLayout({
         </div>
       </nav>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto py-10 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 w-full mx-auto py-10 px-4 sm:px-6 lg:px-8 max-w-7xl">
         {children}
       </main>
     </div>
