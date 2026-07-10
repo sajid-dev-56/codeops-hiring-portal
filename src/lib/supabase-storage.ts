@@ -27,10 +27,13 @@ export async function generatePresignedUploadUrl(key: string) {
 /**
  * Generates a presigned URL for downloading/viewing a file.
  */
-export async function generatePresignedDownloadUrl(key: string): Promise<string> {
+export async function generatePresignedDownloadUrl(
+  key: string,
+  download: boolean = false
+): Promise<string> {
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET)
-    .createSignedUrl(key, 3600); // 1 hour
+    .createSignedUrl(key, 3600, { download }); // 1 hour
 
   if (error) {
     throw error;

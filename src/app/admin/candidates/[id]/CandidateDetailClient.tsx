@@ -53,11 +53,11 @@ export default function CandidateDetailClient({
   });
   const [savingInterview, setSavingInterview] = useState(false);
 
-  const handleDownloadCV = async () => {
+  const handleDownloadCV = async (download: boolean = false) => {
     if (!cvFileKey) return;
     setDownloading(true);
     try {
-      const res = await fetch(`/api/upload/download?key=${encodeURIComponent(cvFileKey)}`);
+      const res = await fetch(`/api/upload/download?key=${encodeURIComponent(cvFileKey)}&download=${download}`);
       const { downloadUrl } = await res.json();
       window.open(downloadUrl, "_blank");
     } catch (err) {
@@ -116,16 +116,29 @@ export default function CandidateDetailClient({
             {cvFileKey ? "Download the candidate's resume" : "No resume uploaded"}
           </p>
         </div>
-        <button
-          onClick={handleDownloadCV}
-          disabled={downloading || !cvFileKey}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-50 text-primary-700 font-medium text-sm hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          {downloading ? "Preparing..." : "Download CV"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleDownloadCV(false)}
+            disabled={downloading || !cvFileKey}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-50 text-surface-700 font-medium text-sm hover:bg-surface-100 border border-surface-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Live Preview
+          </button>
+          <button
+            onClick={() => handleDownloadCV(true)}
+            disabled={downloading || !cvFileKey}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-50 text-primary-700 font-medium text-sm hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Download CV
+          </button>
+        </div>
       </div>
 
       {/* Interviews Section */}

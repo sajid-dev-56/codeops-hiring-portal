@@ -9,6 +9,8 @@ export async function GET(request: NextRequest) {
   }
 
   const fileKey = request.nextUrl.searchParams.get("key");
+  const isDownload = request.nextUrl.searchParams.get("download") === "true";
+  
   if (!fileKey) {
     return NextResponse.json(
       { error: "File key is required" },
@@ -17,7 +19,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const downloadUrl = await generatePresignedDownloadUrl(fileKey);
+    const downloadUrl = await generatePresignedDownloadUrl(fileKey, isDownload);
     return NextResponse.json({ downloadUrl });
   } catch (error) {
     console.error("Download URL error:", error);
