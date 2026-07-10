@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -11,9 +11,17 @@ type FormState = {
   phone: string;
   portfolioUrl: string;
   expectedSalary: string;
+  expectedSalary: string;
   noticePeriod: string;
   coverLetter: string;
+  customAnswers: Record<string, string>;
   website: string; // honeypot
+};
+
+type CustomQuestion = {
+  question: string;
+  required: boolean;
+  type: string;
 };
 
 export default function ApplyPage() {
@@ -30,9 +38,15 @@ export default function ApplyPage() {
     portfolioUrl: "",
     expectedSalary: "",
     noticePeriod: "",
+    noticePeriod: "",
     coverLetter: "",
+    customAnswers: {},
     website: "",
   });
+
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
+  const [loadingJob, setLoadingJob] = useState(true);
 
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -41,11 +55,44 @@ export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
+  useEffect(() => {
+    fetch(`/api/jobs/by-slug?slug=${slug}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.jobId) {
+          setJobId(data.jobId);
+          setCustomQuestions(data.customQuestions || []);
+          
+          // Initialize custom answers
+          const initialAnswers: Record<string, string> = {};
+          (data.customQuestions || []).forEach((q: CustomQuestion) => {
+            initialAnswers[q.question] = "";
+          });
+          setForm(prev => ({ ...prev, customAnswers: initialAnswers }));
+        }
+      })
+      .catch(err => console.error(err))
+      .finally(() => setLoadingJob(false));
+  }, [slug]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    
+    if (name.startsWith("custom_")) {
+      const qName = name.replace("custom_", "");
+      setForm((prev) => ({
+        ...prev,
+        customAnswers: {
+          ...prev.customAnswers,
+          [qName]: value
+        }
+      }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+    
     if (errors[name]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -97,14 +144,11 @@ export default function ApplyPage() {
     setErrors({});
 
     try {
-      // First, get the job ID from the slug
-      const jobRes = await fetch(`/api/jobs/by-slug?slug=${slug}`);
-      if (!jobRes.ok) {
+      if (!jobId) {
         setErrors({ form: "This position is no longer available." });
         setSubmitting(false);
         return;
       }
-      const { jobId } = await jobRes.json();
 
       let cvFileKey = "";
       let cvFileUrl = "";
@@ -206,6 +250,14 @@ export default function ApplyPage() {
             ← Back to Careers
           </Link>
         </div>
+      </div>
+    );
+  }
+
+  if (loadingJob) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex justify-center">
+        <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -404,6 +456,40 @@ export default function ApplyPage() {
                 {form.coverLetter.length}/5000 characters
               </p>
             </div>
+            
+            {customQuestions.length > 0 && (
+              <div className="pt-6 border-t border-surface-200 space-y-5">
+                <h3 className="text-sm font-semibold text-surface-900">Additional Questions</h3>
+                {customQuestions.map((q, idx) => (
+                  <div key={idx}>
+                    <label htmlFor={`custom_${q.question}`} className="block text-sm font-medium text-surface-700 mb-1.5">
+                      {q.question} {q.required && "*"}
+                    </label>
+                    {q.type === "textarea" ? (
+                      <textarea
+                        id={`custom_${q.question}`}
+                        name={`custom_${q.question}`}
+                        required={q.required}
+                        value={form.customAnswers[q.question] || ""}
+                        onChange={handleChange}
+                        rows={3}
+                        className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400 resize-none"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        id={`custom_${q.question}`}
+                        name={`custom_${q.question}`}
+                        required={q.required}
+                        value={form.customAnswers[q.question] || ""}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* CV Upload */}

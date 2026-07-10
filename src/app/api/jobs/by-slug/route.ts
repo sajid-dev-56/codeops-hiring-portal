@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
   const job = await prisma.job.findUnique({
     where: { slug },
-    select: { id: true, status: true },
+    select: { id: true, status: true, customQuestions: true },
   });
 
   if (!job || job.status !== "OPEN") {
@@ -19,5 +19,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ jobId: job.id });
+  return NextResponse.json({ 
+    jobId: job.id,
+    customQuestions: job.customQuestions 
+      ? (typeof job.customQuestions === "string" ? JSON.parse(job.customQuestions) : job.customQuestions)
+      : [] 
+  });
 }

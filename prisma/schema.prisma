@@ -67,6 +67,7 @@ model Job {
   headcount       Int       @default(1)
   targetStartDate DateTime?
   description     String    @db.Text
+  customQuestions Json?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -88,6 +89,7 @@ model Candidate {
   coverLetter    String?        @db.Text
   cvFileKey      String?
   cvFileUrl      String?
+  customAnswers  Json?
   userId         String?
   user           User?          @relation(fields: [userId], references: [id])
 

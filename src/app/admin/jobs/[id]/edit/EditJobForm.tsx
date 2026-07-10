@@ -7,6 +7,13 @@ import { RichTextEditor } from "@/components/RichTextEditor";
 
 export default function EditJobForm({ job }: { job: Job }) {
   const [description, setDescription] = useState(job.description);
+  
+  // Parse custom questions from job if available
+  const initialCustomQuestions = job.customQuestions 
+    ? (typeof job.customQuestions === "string" ? JSON.parse(job.customQuestions) : job.customQuestions) 
+    : [];
+  const [customQuestions, setCustomQuestions] = useState<{question: string, required: boolean, type: string}[]>(initialCustomQuestions as any);
+  
   const updateJobWithId = updateJob.bind(null, job.id);
 
   const [error, formAction, isPending] = useActionState(
@@ -134,6 +141,89 @@ export default function EditJobForm({ job }: { job: Job }) {
             </label>
             <input type="hidden" name="description" value={description} />
             <RichTextEditor content={description} onChange={setDescription} />
+          </div>
+          
+          <div className="sm:col-span-2 pt-6 border-t border-surface-200">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-surface-900">Custom Questions</h3>
+                <p className="text-sm text-surface-500">Add dynamic fields to the application form.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCustomQuestions([...customQuestions, { question: "", required: false, type: "text" }])}
+                className="px-3 py-1.5 text-sm bg-surface-100 hover:bg-surface-200 rounded-lg text-surface-700 font-medium transition-colors"
+              >
+                + Add Question
+              </button>
+            </div>
+
+            <input type="hidden" name="customQuestions" value={JSON.stringify(customQuestions)} />
+
+            <div className="space-y-4">
+              {customQuestions.map((q, idx) => (
+                <div key={idx} className="flex items-start gap-4 p-4 rounded-xl border border-surface-200 bg-surface-50/50">
+                  <div className="flex-1 space-y-4">
+                    <div>
+                      <label className="block text-xs font-medium text-surface-700 mb-1">Question Text</label>
+                      <input
+                        type="text"
+                        value={q.question}
+                        onChange={(e) => {
+                          const newQ = [...customQuestions];
+                          newQ[idx].question = e.target.value;
+                          setCustomQuestions(newQ);
+                        }}
+                        placeholder="e.g. Why do you want to work here?"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 focus:border-primary-400 outline-none"
+                      />
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div>
+                        <label className="block text-xs font-medium text-surface-700 mb-1">Response Type</label>
+                        <select
+                          value={q.type}
+                          onChange={(e) => {
+                            const newQ = [...customQuestions];
+                            newQ[idx].type = e.target.value;
+                            setCustomQuestions(newQ);
+                          }}
+                          className="px-3 py-1.5 text-sm rounded-lg border border-surface-200 focus:border-primary-400 outline-none bg-white"
+                        >
+                          <option value="text">Short Text</option>
+                          <option value="textarea">Long Text (Paragraph)</option>
+                        </select>
+                      </div>
+                      <label className="flex items-center gap-2 mt-4 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={q.required}
+                          onChange={(e) => {
+                            const newQ = [...customQuestions];
+                            newQ[idx].required = e.target.checked;
+                            setCustomQuestions(newQ);
+                          }}
+                          className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
+                        />
+                        <span className="text-sm font-medium text-surface-700">Required</span>
+                      </label>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCustomQuestions(customQuestions.filter((_, i) => i !== idx))}
+                    className="p-2 text-surface-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+              {customQuestions.length === 0 && (
+                <p className="text-sm text-surface-400 text-center py-4 border-2 border-dashed border-surface-200 rounded-xl">No custom questions added yet.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

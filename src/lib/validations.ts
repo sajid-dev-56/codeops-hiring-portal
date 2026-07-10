@@ -16,6 +16,7 @@ export const createJobSchema = z.object({
   headcount: z.coerce.number().int().min(1, "Headcount must be at least 1"),
   targetStartDate: z.string().optional().nullable(),
   description: z.string().min(10, "Description must be at least 10 characters"),
+  customQuestions: z.string().optional(),
 });
 
 export const updateJobSchema = createJobSchema.partial();
@@ -37,6 +38,7 @@ export const applicationSchema = z.object({
   cvFileKey: z.string().optional().or(z.literal("")),
   cvFileUrl: z.string().optional().or(z.literal("")),
   jobId: z.string().min(1, "Job ID is required"),
+  customAnswers: z.record(z.string()).optional(),
   // Honeypot field - should always be empty
   website: z.string().max(0, "Bot detected").optional().or(z.literal("")),
 });

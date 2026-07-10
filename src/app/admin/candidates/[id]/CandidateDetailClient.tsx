@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { addNote, createInterview } from "../actions";
+import { useRouter } from "next/navigation";
 
 type NoteData = {
   id: string;
@@ -39,7 +40,9 @@ export default function CandidateDetailClient({
   serializedNotes: NoteData[];
   serializedInterviews: InterviewData[];
 }) {
+  const router = useRouter();
   const [downloading, setDownloading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [noteContent, setNoteContent] = useState("");
   const [addingNote, setAddingNote] = useState(false);
   const [showInterviewForm, setShowInterviewForm] = useState(false);
@@ -106,6 +109,24 @@ export default function CandidateDetailClient({
     setSavingInterview(false);
   };
 
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this candidate? This action cannot be undone and will also delete their CV.")) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/candidates/${candidateId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+      router.push("/admin/candidates");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete candidate");
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="space-y-6 mt-6">
       {/* CV Section */}
@@ -140,6 +161,28 @@ export default function CandidateDetailClient({
           </button>
         </div>
       </div>
+
+      {/* Custom Questions / Application Details */}
+      {candidate.customAnswers && Object.keys(candidate.customAnswers as Record<string, string>).length > 0 && (
+        <div className="bg-white rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8">
+          <h2 className="text-lg font-bold text-surface-900 mb-6 flex items-center gap-2">
+            <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+            Application Responses
+          </h2>
+          <div className="space-y-6">
+            {Object.entries(candidate.customAnswers as Record<string, string>).map(([question, answer], idx) => (
+              <div key={idx}>
+                <h3 className="text-sm font-semibold text-surface-700 mb-2">{question}</h3>
+                <p className="text-surface-600 bg-surface-50 p-4 rounded-xl text-sm whitespace-pre-wrap leading-relaxed">
+                  {answer || <span className="italic text-surface-400">No answer provided</span>}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Interviews Section */}
       <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6">
@@ -409,6 +452,20 @@ export default function CandidateDetailClient({
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Delete Section */}
+      <div className="pt-6 border-t border-surface-200 flex justify-end">
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100 disabled:opacity-50 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          {deleting ? "Deleting..." : "Delete Candidate"}
+        </button>
       </div>
     </div>
   );

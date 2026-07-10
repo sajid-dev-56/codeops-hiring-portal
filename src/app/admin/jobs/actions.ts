@@ -19,6 +19,7 @@ export async function createJob(formData: FormData) {
     headcount: Number(formData.get("headcount")),
     targetStartDate: formData.get("targetStartDate") as string || null,
     description: formData.get("description") as string,
+    customQuestions: formData.get("customQuestions") as string || "[]",
   };
 
   const validated = createJobSchema.safeParse(raw);
@@ -29,6 +30,7 @@ export async function createJob(formData: FormData) {
   await prisma.job.create({
     data: {
       ...validated.data,
+      customQuestions: validated.data.customQuestions ? JSON.parse(validated.data.customQuestions) : [],
       targetStartDate: validated.data.targetStartDate
         ? new Date(validated.data.targetStartDate)
         : null,
@@ -53,6 +55,7 @@ export async function updateJob(id: string, formData: FormData) {
     headcount: Number(formData.get("headcount")),
     targetStartDate: formData.get("targetStartDate") as string || null,
     description: formData.get("description") as string,
+    customQuestions: formData.get("customQuestions") as string || "[]",
   };
 
   const validated = createJobSchema.safeParse(raw);
@@ -64,6 +67,7 @@ export async function updateJob(id: string, formData: FormData) {
     where: { id },
     data: {
       ...validated.data,
+      customQuestions: validated.data.customQuestions ? JSON.parse(validated.data.customQuestions) : [],
       targetStartDate: validated.data.targetStartDate
         ? new Date(validated.data.targetStartDate)
         : null,

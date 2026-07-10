@@ -59,6 +59,32 @@ export default function KanbanBoard({
     }
   };
 
+  const handleDeleteCandidate = async (candidateId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!confirm("Are you sure you want to delete this candidate? This action cannot be undone and will also delete their CV.")) {
+      return;
+    }
+
+    try {
+      // Optimistic update
+      setCandidates((prev) => prev.filter((c) => c.id !== candidateId));
+      
+      const res = await fetch(`/api/candidates/${candidateId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete candidate");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete candidate");
+      setCandidates(initialCandidates);
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="flex gap-4 overflow-x-auto pb-4 min-h-[calc(100vh-250px)]">
@@ -140,6 +166,15 @@ export default function KanbanBoard({
                                     })}
                                   </p>
                                 </div>
+                                <button
+                                  onClick={(e) => handleDeleteCandidate(candidate.id, e)}
+                                  className="text-surface-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors flex-shrink-0"
+                                  title="Delete Candidate"
+                                >
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
+                                </button>
                               </div>
                             </Link>
                           </div>
