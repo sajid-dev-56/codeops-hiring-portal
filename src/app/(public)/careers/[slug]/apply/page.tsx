@@ -128,17 +128,22 @@ export default function ApplyPage() {
             throw new Error(err.error || "Failed to prepare upload");
           }
 
-          const { uploadUrl, fileKey } = await presignRes.json();
+          const { uploadUrl, token, path, fileKey } = await presignRes.json();
 
-          // Upload directly to R2
+          // We use standard fetch with the Supabase REST API
+          // Supabase's uploadToSignedUrl expects a PUT to the signedUrl
           const uploadRes = await fetch(uploadUrl, {
             method: "PUT",
             body: cvFile,
-            headers: { "Content-Type": cvFile.type },
+            headers: { 
+              "Content-Type": cvFile.type,
+              "Authorization": `Bearer ${token}` 
+            },
           });
 
           if (!uploadRes.ok) {
-            throw new Error("Failed to upload file");
+            const errBody = await uploadRes.text();
+            throw new Error("Failed to upload file to Supabase: " + errBody);
           }
 
           cvFileKey = fileKey;

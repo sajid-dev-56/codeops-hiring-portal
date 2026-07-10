@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { presignUploadSchema } from "@/lib/validations";
-import { generatePresignedUploadUrl } from "@/lib/r2";
+import { generatePresignedUploadUrl } from "@/lib/supabase-storage";
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,13 +14,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { filename, contentType } = validated.data;
+    const { filename } = validated.data;
     const ext = filename.split(".").pop();
-    const key = `cv/${crypto.randomUUID()}.${ext}`;
+    const key = `${crypto.randomUUID()}.${ext}`;
 
-    const uploadUrl = await generatePresignedUploadUrl(key, contentType);
+    const { signedUrl, token, path } = await generatePresignedUploadUrl(key);
 
-    return NextResponse.json({ uploadUrl, fileKey: key });
+    return NextResponse.json({ uploadUrl: signedUrl, token, path, fileKey: path });
   } catch (error) {
     console.error("Presign error:", error);
     return NextResponse.json(
