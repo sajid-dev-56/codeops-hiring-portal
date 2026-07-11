@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navItems = [
   {
@@ -54,7 +55,7 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-surface-50">
+    <div className="min-h-screen bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white transition-colors duration-300">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -119,7 +120,7 @@ export default function AdminLayout({
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 glass border-b border-surface-200">
+        <header className="sticky top-0 z-30 bg-white/90 dark:bg-surface-950/90 backdrop-blur-xl border-b border-surface-200 dark:border-surface-800 transition-colors duration-300">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -130,6 +131,7 @@ export default function AdminLayout({
               </svg>
             </button>
             <div className="flex items-center gap-4 ml-auto">
+              <ThemeToggle />
               <Link
                 href="/careers"
                 target="_blank"
