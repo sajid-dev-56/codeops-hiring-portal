@@ -1,13 +1,31 @@
-const rateLimitMap = new Map<
-  string,
-  { count: number; resetTime: number }
->();
+import { Ratelimit } from "@upstash/ratelimit";
+import { kv } from "@vercel/kv";
 
-export function rateLimit(
+// Fallback in-memory map for local development if KV is not configured
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+// Try to initialize Upstash Ratelimit if KV is available
+let upstashRateLimit: Ratelimit | null = null;
+if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+  upstashRateLimit = new Ratelimit({
+    redis: kv,
+    limiter: Ratelimit.slidingWindow(5, "1 h"),
+    analytics: true,
+  });
+}
+
+export async function rateLimit(
   identifier: string,
   limit: number = 5,
   windowMs: number = 60 * 60 * 1000 // 1 hour
-): { success: boolean; remaining: number } {
+): Promise<{ success: boolean; remaining: number }> {
+  // Use distributed Vercel KV rate limiting if configured (Production)
+  if (upstashRateLimit) {
+    const { success, remaining } = await upstashRateLimit.limit(identifier);
+    return { success, remaining };
+  }
+
+  // Fallback to in-memory rate limiting (Local Dev)
   const now = Date.now();
   const record = rateLimitMap.get(identifier);
 
@@ -24,12 +42,14 @@ export function rateLimit(
   return { success: true, remaining: limit - record.count };
 }
 
-// Cleanup old entries periodically
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, value] of rateLimitMap.entries()) {
-    if (now > value.resetTime) {
-      rateLimitMap.delete(key);
+// Cleanup old entries periodically (only affects fallback map)
+if (typeof setInterval !== "undefined") {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, value] of rateLimitMap.entries()) {
+      if (now > value.resetTime) {
+        rateLimitMap.delete(key);
+      }
     }
-  }
-}, 60 * 1000); // Every minute
+  }, 60 * 1000);
+}

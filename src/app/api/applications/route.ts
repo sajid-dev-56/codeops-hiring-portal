@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   try {
     // Rate limiting by IP
     const ip = request.headers.get("x-forwarded-for") || "unknown";
-    const { success } = rateLimit(ip, 5, 60 * 60 * 1000); // 5 per hour
+    const { success } = await rateLimit(ip, 5, 60 * 60 * 1000); // 5 per hour
 
     if (!success) {
       return NextResponse.json(

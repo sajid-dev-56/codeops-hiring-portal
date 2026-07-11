@@ -25,8 +25,17 @@ export const updateJobSchema = createJobSchema.partial();
 export const applicationSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  phone: z.string().max(20).optional().or(z.literal("")),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+  phone: z
+    .string()
+    .regex(/^\+?[0-9\s\-()]{7,20}$/, "Invalid phone number format")
+    .optional()
+    .or(z.literal("")),
   portfolioUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
   expectedSalary: z.string().max(50).optional().or(z.literal("")),
   noticePeriod: z.string().max(50).optional().or(z.literal("")),
@@ -77,7 +86,7 @@ export const presignUploadSchema = z.object({
       ].includes(type),
     "Only PDF, DOC, and DOCX files are allowed"
   ),
-  fileSize: z.number().max(10 * 1024 * 1024, "File size must be under 10MB"),
+  fileSize: z.number().max(5 * 1024 * 1024, "File size must be under 5MB"),
 });
 
 // Candidate stage update
