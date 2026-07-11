@@ -44,16 +44,16 @@ export default function PublicLayout({
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-surface-200 bg-white">
+      <footer className="border-t border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-950 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={24} height={24} className="h-6 w-auto object-contain grayscale opacity-70" />
-              <span className="text-sm text-surface-500">
+              <span className="text-sm text-surface-500 dark:text-surface-400">
                 © {new Date().getFullYear()} CodeOps Hiring Portal. All rights reserved.
               </span>
             </div>
-            <div className="flex items-center gap-4 text-sm text-surface-400">
+            <div className="flex items-center gap-4 text-sm text-surface-400 dark:text-surface-500">
               <Link href="/careers" className="hover:text-primary-600 transition-colors">
                 Open Positions
               </Link>
