@@ -13,9 +13,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const job = await prisma.job.findUnique({ where: { slug } });
   if (!job) return { title: "Job Not Found" };
+  
+  const title = `${job.title} at CodeOps Pro`;
+  const description = `Apply for ${job.title} in ${job.department}. ${job.description.replace(/<[^>]+>/g, '').substring(0, 160)}...`;
+
   return {
-    title: `${job.title} — CodeOps Hiring Portal Careers`,
-    description: `Apply for ${job.title} in ${job.department}. ${job.description.substring(0, 160)}...`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://codeopspro.vercel.app/careers/${slug}`,
+      images: [
+        {
+          url: "/logo.jpg",
+          width: 800,
+          height: 600,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/logo.jpg"],
+    },
   };
 }
 
