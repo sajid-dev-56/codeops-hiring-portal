@@ -6,9 +6,16 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
 // Try to initialize Upstash Ratelimit if KV is available
 let upstashRateLimit: Ratelimit | null = null;
-if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+if (kvUrl && kvToken) {
+  // We use standard fetch-based Redis client from upstash since Vercel KV is deprecated
+  const { Redis } = require("@upstash/redis");
+  const redis = new Redis({ url: kvUrl, token: kvToken });
+  
   upstashRateLimit = new Ratelimit({
-    redis: kv,
+    redis: redis,
     limiter: Ratelimit.slidingWindow(5, "1 h"),
     analytics: true,
   });
