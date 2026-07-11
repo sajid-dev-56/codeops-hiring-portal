@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://codeopspro.vercel.app"),
@@ -44,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-50 min-h-screen transition-colors duration-300" suppressHydrationWarning>
+      <body className={`${inter.className} bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-50 min-h-screen transition-colors duration-300`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
