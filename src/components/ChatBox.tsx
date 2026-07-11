@@ -74,9 +74,9 @@ export function ChatBox({ candidateId, currentRole }: ChatBoxProps) {
   }
 
   return (
-    <div className="flex flex-col h-full min-h-[400px] bg-white border border-surface-200 rounded-xl overflow-hidden shadow-sm">
-      <div className="px-6 py-4 border-b border-surface-200 bg-surface-50/50">
-        <h3 className="text-lg font-medium text-surface-900">Messages</h3>
+    <div className="flex flex-col h-full min-h-[400px] bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="px-6 py-4 border-b border-surface-200 dark:border-surface-800 bg-surface-50/50 dark:bg-surface-800/50">
+        <h3 className="text-lg font-medium text-surface-900 dark:text-white">Messages</h3>
       </div>
       
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -101,7 +101,7 @@ export function ChatBox({ candidateId, currentRole }: ChatBoxProps) {
                   className={`px-4 py-2.5 rounded-2xl max-w-[80%] ${
                     isMe
                       ? "bg-primary-600 text-white rounded-br-sm shadow-md shadow-primary-500/20"
-                      : "bg-surface-100 text-surface-900 rounded-bl-sm"
+                      : "bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-white rounded-bl-sm"
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -113,14 +113,14 @@ export function ChatBox({ candidateId, currentRole }: ChatBoxProps) {
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 bg-white border-t border-surface-200">
+      <div className="p-4 bg-white dark:bg-surface-900 border-t border-surface-200 dark:border-surface-800">
         <form onSubmit={sendMessage} className="flex space-x-3">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 block w-full rounded-xl border-surface-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-surface-50 px-4 py-3"
+            className="flex-1 block w-full rounded-xl border-surface-200 dark:border-surface-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-surface-50 dark:bg-surface-800 text-surface-900 dark:text-white placeholder:text-surface-400 dark:placeholder:text-surface-500 px-4 py-3"
           />
           <button
             type="submit"

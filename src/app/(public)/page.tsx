@@ -78,7 +78,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredJobs.map((job) => (
-              <Link href={`/candidate/jobs/${job.slug}`} key={job.id} className="group">
+              <Link href={`/careers/${job.slug}`} key={job.id} className="group">
                 <div className="h-full bg-surface-50 dark:bg-surface-800/80 rounded-2xl p-6 border border-surface-200 dark:border-surface-700 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/10 flex flex-col">
                   <div className="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <Briefcase className="w-6 h-6" />

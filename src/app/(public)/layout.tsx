@@ -11,7 +11,7 @@ export default function PublicLayout({
   return (
     <div className="min-h-screen flex flex-col bg-surface-50 dark:bg-surface-950 transition-colors duration-300">
       {/* Header */}
-      <header className="glass dark:glass-dark sticky top-0 z-50 border-b border-surface-200 dark:border-surface-800 transition-colors duration-300">
+      <header className="bg-white/90 dark:bg-surface-950/90 backdrop-blur-xl sticky top-0 z-50 border-b border-surface-200 dark:border-surface-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">

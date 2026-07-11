@@ -110,15 +110,15 @@ export default async function JobDetailPage({ params }: Props) {
       </div>
 
       {/* Job Description */}
-      <div className="animate-fade-in bg-white rounded-2xl border border-surface-100 shadow-sm p-8 sm:p-10 mb-8">
+      <div className="animate-fade-in bg-white dark:bg-surface-900 rounded-2xl border border-surface-200 dark:border-surface-800 shadow-sm p-8 sm:p-10 mb-8">
         <div
-          className="prose prose-lg prose-surface max-w-none
-            prose-headings:font-semibold prose-headings:text-surface-900
+          className="prose prose-lg dark:prose-invert max-w-none text-surface-700 dark:text-surface-300
+            prose-headings:font-semibold prose-headings:text-surface-900 dark:prose-headings:text-white
             prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
             prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
-            prose-p:text-surface-600 prose-p:leading-relaxed
-            prose-li:text-surface-600
-            prose-strong:text-surface-800
+            prose-p:text-surface-700 dark:prose-p:text-surface-300 prose-p:leading-relaxed
+            prose-li:text-surface-700 dark:prose-li:text-surface-300
+            prose-strong:text-surface-900 dark:prose-strong:text-white
             prose-ul:mt-2 prose-li:mt-1"
           dangerouslySetInnerHTML={{
             __html: job.description

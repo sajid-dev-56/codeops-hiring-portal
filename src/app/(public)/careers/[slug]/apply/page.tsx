@@ -359,11 +359,49 @@ export default function ApplyPage() {
                   value={form.password}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
-                  placeholder="Create a password (min 6 chars)"
-                  minLength={6}
+                  placeholder="Create a password"
+                  minLength={8}
                 />
+                {form.password && (
+                  <div className="mt-2 space-y-2">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4].map((i) => {
+                        const score = [
+                          form.password.length >= 8,
+                          /[A-Z]/.test(form.password),
+                          /[0-9]/.test(form.password),
+                          /[^A-Za-z0-9]/.test(form.password)
+                        ].filter(Boolean).length;
+                        return (
+                          <div 
+                            key={i} 
+                            className={`h-1.5 flex-1 rounded-full transition-colors ${
+                              i <= score 
+                                ? (score < 3 ? 'bg-amber-400' : 'bg-success-500')
+                                : 'bg-surface-200'
+                            }`} 
+                          />
+                        );
+                      })}
+                    </div>
+                    <ul className="text-xs space-y-1 text-surface-500">
+                      <li className={form.password.length >= 8 ? "text-success-500 flex gap-1" : "flex gap-1"}>
+                        {form.password.length >= 8 ? "✓" : "○"} At least 8 characters
+                      </li>
+                      <li className={/[A-Z]/.test(form.password) ? "text-success-500 flex gap-1" : "flex gap-1"}>
+                        {/[A-Z]/.test(form.password) ? "✓" : "○"} 1 uppercase letter
+                      </li>
+                      <li className={/[0-9]/.test(form.password) ? "text-success-500 flex gap-1" : "flex gap-1"}>
+                        {/[0-9]/.test(form.password) ? "✓" : "○"} 1 number
+                      </li>
+                      <li className={/[^A-Za-z0-9]/.test(form.password) ? "text-success-500 flex gap-1" : "flex gap-1"}>
+                        {/[^A-Za-z0-9]/.test(form.password) ? "✓" : "○"} 1 special character
+                      </li>
+                    </ul>
+                  </div>
+                )}
                 {errors.password && <p className="mt-1 text-sm text-danger-500">{errors.password}</p>}
-                <p className="mt-1 text-xs text-surface-400">Used to login to Candidate Portal later.</p>
+                {!form.password && <p className="mt-1 text-xs text-surface-400">Used to login to Candidate Portal later.</p>}
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-surface-700 mb-1.5">
