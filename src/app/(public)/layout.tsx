@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -14,9 +15,7 @@ export default function PublicLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">H</span>
-              </div>
+              <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={32} height={32} className="h-8 w-auto object-contain" />
               <span className="font-bold text-lg text-surface-900 dark:text-white transition-colors duration-300">
                 CodeOps Hiring Portal
               </span>
@@ -49,9 +48,7 @@ export default function PublicLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                <span className="text-white font-bold text-xs">H</span>
-              </div>
+              <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={24} height={24} className="h-6 w-auto object-contain grayscale opacity-70" />
               <span className="text-sm text-surface-500">
                 © {new Date().getFullYear()} CodeOps Hiring Portal. All rights reserved.
               </span>

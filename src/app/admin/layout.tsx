@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -70,9 +71,7 @@ export default function AdminLayout({
       >
         <div className="p-6 border-b border-white/10">
           <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">H</span>
-            </div>
+            <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={36} height={36} className="h-9 w-auto object-contain rounded-sm" />
             <div>
               <h1 className="font-bold text-lg leading-tight">CodeOps Hiring Portal</h1>
               <p className="text-xs text-surface-400">Admin Portal</p>
