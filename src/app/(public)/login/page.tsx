@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 function LoginForm() {
   const router = useRouter();
@@ -126,8 +127,8 @@ export default function LoginPage() {
       <div className="animate-scale-in relative w-full max-w-md">
         <div className="glass-dark rounded-2xl p-8 sm:p-10 shadow-2xl">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">H</span>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center">
+              <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={64} height={64} className="w-full h-full object-contain rounded-xl shadow-lg" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-1">Login Portal</h1>
             <p className="text-surface-400 text-sm">
