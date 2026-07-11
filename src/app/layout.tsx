@@ -3,6 +3,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
+import { ThemeProvider } from "@/components/theme-provider";
+
 export const metadata: Metadata = {
   title: "Hiring Portal — Find Your Next Career Opportunity",
   description:
@@ -17,10 +19,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-surface-50 text-surface-900 min-h-screen" suppressHydrationWarning>
-        {children}
-        <SpeedInsights />
-        <Analytics />
+      <body className="bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-50 min-h-screen transition-colors duration-300" suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <SpeedInsights />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

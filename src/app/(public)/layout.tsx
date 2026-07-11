@@ -1,37 +1,41 @@
 import Link from "next/link";
 
+import { ThemeToggle } from "@/components/theme-toggle";
+
 export default function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-surface-50 dark:bg-surface-950 transition-colors duration-300">
       {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-surface-200">
+      <header className="glass dark:glass-dark sticky top-0 z-50 border-b border-surface-200 dark:border-surface-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">H</span>
               </div>
-              <span className="font-bold text-lg text-surface-900">
+              <span className="font-bold text-lg text-surface-900 dark:text-white transition-colors duration-300">
                 CodeOps Hiring Portal
               </span>
             </Link>
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-4 sm:gap-6">
               <Link
                 href="/careers"
-                className="text-sm font-medium text-surface-600 hover:text-primary-600 transition-colors"
+                className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Careers
               </Link>
               <Link
                 href="/login"
-                className="text-sm font-medium text-surface-600 hover:text-primary-600 transition-colors"
+                className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Login Portal
               </Link>
+              <div className="h-4 w-px bg-surface-200 dark:bg-surface-700 hidden sm:block"></div>
+              <ThemeToggle />
             </nav>
           </div>
         </div>
