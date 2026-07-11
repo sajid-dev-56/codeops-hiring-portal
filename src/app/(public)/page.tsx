@@ -1,16 +1,50 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ArrowRight, Briefcase, Zap, Globe, Shield, Star, CheckCircle2 } from "lucide-react";
+import { Suspense } from "react";
 
 export const revalidate = 60; // Revalidate every minute
 
-export default async function HomePage() {
+async function FeaturedJobsList() {
   const featuredJobs = await prisma.job.findMany({
     where: { status: "OPEN" },
     take: 3,
     orderBy: { createdAt: "desc" },
   });
 
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featuredJobs.map((job) => (
+        <Link href={`/careers/${job.slug}`} key={job.id} className="group">
+          <div className="h-full bg-surface-50 dark:bg-surface-800/80 rounded-2xl p-6 border border-surface-200 dark:border-surface-700 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/10 flex flex-col">
+            <div className="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Briefcase className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-bold text-surface-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {job.title}
+            </h3>
+            <div className="flex items-center gap-3 text-sm text-surface-500 dark:text-surface-400 mb-6">
+              <span className="px-2.5 py-1 rounded-md bg-surface-200 dark:bg-surface-700">{job.department}</span>
+              <span>•</span>
+              <span>{job.headcount} {job.headcount === 1 ? 'Opening' : 'Openings'}</span>
+            </div>
+            <div className="mt-auto pt-4 border-t border-surface-200 dark:border-surface-700 flex items-center justify-between text-sm font-medium text-surface-900 dark:text-white">
+              Apply Now
+              <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary-500" />
+            </div>
+          </div>
+        </Link>
+      ))}
+      {featuredJobs.length === 0 && (
+        <div className="col-span-full text-center py-12 bg-surface-50 dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700">
+          <p className="text-surface-500 dark:text-surface-400">More amazing roles coming soon!</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -72,38 +106,19 @@ export default async function HomePage() {
               href="/careers"
               className="inline-flex items-center text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
             >
-              View all {featuredJobs.length > 0 ? "jobs" : ""} <ArrowRight className="w-4 h-4 ml-1" />
+              View all jobs <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredJobs.map((job) => (
-              <Link href={`/careers/${job.slug}`} key={job.id} className="group">
-                <div className="h-full bg-surface-50 dark:bg-surface-800/80 rounded-2xl p-6 border border-surface-200 dark:border-surface-700 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/10 flex flex-col">
-                  <div className="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Briefcase className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-bold text-surface-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    {job.title}
-                  </h3>
-                  <div className="flex items-center gap-3 text-sm text-surface-500 dark:text-surface-400 mb-6">
-                    <span className="px-2.5 py-1 rounded-md bg-surface-200 dark:bg-surface-700">{job.department}</span>
-                    <span>•</span>
-                    <span>{job.headcount} {job.headcount === 1 ? 'Opening' : 'Openings'}</span>
-                  </div>
-                  <div className="mt-auto pt-4 border-t border-surface-200 dark:border-surface-700 flex items-center justify-between text-sm font-medium text-surface-900 dark:text-white">
-                    Apply Now
-                    <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary-500" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-            {featuredJobs.length === 0 && (
-              <div className="col-span-full text-center py-12 bg-surface-50 dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700">
-                <p className="text-surface-500 dark:text-surface-400">More amazing roles coming soon!</p>
-              </div>
-            )}
-          </div>
+          <Suspense fallback={
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-[280px] bg-surface-100 dark:bg-surface-800/50 rounded-2xl p-6 border border-surface-200 dark:border-surface-700 animate-pulse" />
+              ))}
+            </div>
+          }>
+            <FeaturedJobsList />
+          </Suspense>
         </div>
       </section>
 
