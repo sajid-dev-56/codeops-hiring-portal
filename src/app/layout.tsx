@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     description: "Browse open positions and apply to join our team.",
     images: ["/logo.jpg"],
   },
+  verification: {
+    google: "hA1ty0J3MuznkmWz9rGbOWXRYBhoyjzyqiq7tcqZ3Iw",
+  },
 };
 
 export default function RootLayout({
