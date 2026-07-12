@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminDashboard() {
+async function DashboardStats() {
   const [jobCount, candidateCount, interviewCount, stageData, recentCandidates] =
     await Promise.all([
       prisma.job.count({ where: { status: "OPEN" } }),
@@ -88,14 +89,7 @@ export default async function AdminDashboard() {
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-surface-900">Dashboard</h1>
-        <p className="text-surface-500 mt-1">
-          Overview of your hiring pipeline
-        </p>
-      </div>
-
+    <>
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
@@ -209,6 +203,29 @@ export default async function AdminDashboard() {
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-surface-900">Dashboard</h1>
+        <p className="text-surface-500 mt-1">
+          Overview of your hiring pipeline
+        </p>
+      </div>
+      
+      <Suspense fallback={
+        <div className="animate-pulse space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-surface-100 dark:bg-surface-800 rounded-xl"></div>)}
+          </div>
+        </div>
+      }>
+        <DashboardStats />
+      </Suspense>
     </div>
   );
 }
