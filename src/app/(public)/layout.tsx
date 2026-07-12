@@ -15,7 +15,7 @@ export default function PublicLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
-              <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={32} height={32} priority fetchPriority="high" className="h-8 w-auto object-contain" />
+              <Image src="/logo.png" alt="CodeOps Pro Logo" width={48} height={48} priority fetchPriority="high" className="h-12 w-auto object-contain" />
               <span className="font-bold text-lg text-surface-900 dark:text-white transition-colors duration-300">
                 <span className="hidden sm:inline">CodeOps Hiring Portal</span>
                 <span className="sm:hidden">CodeOps</span>
@@ -49,7 +49,7 @@ export default function PublicLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={24} height={24} className="h-6 w-auto object-contain grayscale opacity-70" />
+              <Image src="/logo.png" alt="CodeOps Pro Logo" width={24} height={24} className="h-6 w-auto object-contain grayscale opacity-70" />
               <span className="text-sm text-surface-500 dark:text-surface-400">
                 © {new Date().getFullYear()} CodeOps Hiring Portal. All rights reserved.
               </span>

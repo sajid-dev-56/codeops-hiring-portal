@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "CodeOps Pro",
     images: [
       {
-        url: "/logo.jpg",
+        url: "/logo.png",
         width: 800,
         height: 600,
       },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CodeOps Hiring Portal",
     description: "Browse open positions and apply to join our team.",
-    images: ["/logo.jpg"],
+    images: ["/logo.png"],
   },
   verification: {
     google: "hA1ty0J3MuznkmWz9rGbOWXRYBhoyjzyqiq7tcqZ3Iw",

@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://codeopspro.vercel.app/careers/${slug}`,
       images: [
         {
-          url: "/logo.jpg",
+          url: "/logo.png",
           width: 800,
           height: 600,
           alt: title,
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: ["/logo.jpg"],
+      images: ["/logo.png"],
     },
   };
 }

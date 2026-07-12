@@ -234,7 +234,7 @@ export default function ApplyPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-surface-900 mb-3">
+          <h1 className="text-3xl font-bold text-surface-900 dark:text-surface-50 mb-3">
             Application Submitted! 🎉
           </h1>
           <p className="text-lg text-surface-500 mb-8">
@@ -283,7 +283,7 @@ export default function ApplyPage() {
       </nav>
 
       <div className="animate-fade-in">
-        <h1 className="text-3xl font-extrabold text-surface-900 mb-2">
+        <h1 className="text-3xl font-extrabold text-surface-900 dark:text-surface-50 mb-2">
           Submit Your Application
         </h1>
         <p className="text-surface-500 mb-8">
@@ -306,8 +306,8 @@ export default function ApplyPage() {
           </div>
 
           {/* Personal Info */}
-          <div className="bg-white rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8 space-y-5">
-            <h2 className="text-lg font-semibold text-surface-900 flex items-center gap-2">
+          <div className="bg-white dark:bg-surface-900/40 rounded-2xl border border-surface-100 dark:border-surface-800 shadow-sm p-6 sm:p-8 space-y-5">
+            <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-50 flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 text-sm font-bold">
                 1
               </span>
@@ -316,7 +316,7 @@ export default function ApplyPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="name" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Full Name *
                 </label>
                 <input
@@ -326,13 +326,13 @@ export default function ApplyPage() {
                   required
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="John Doe"
                 />
                 {errors.name && <p className="mt-1 text-sm text-danger-500">{errors.name}</p>}
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="email" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Email *
                 </label>
                 <input
@@ -342,13 +342,13 @@ export default function ApplyPage() {
                   required
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="john@example.com"
                 />
                 {errors.email && <p className="mt-1 text-sm text-danger-500">{errors.email}</p>}
               </div>
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Account Password *
                 </label>
                 <input
@@ -358,7 +358,7 @@ export default function ApplyPage() {
                   required
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="Create a password"
                   minLength={8}
                 />
@@ -404,7 +404,7 @@ export default function ApplyPage() {
                 {!form.password && <p className="mt-1 text-xs text-surface-400">Used to login to Candidate Portal later.</p>}
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="phone" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Phone
                 </label>
                 <input
@@ -413,12 +413,12 @@ export default function ApplyPage() {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
               <div>
-                <label htmlFor="portfolioUrl" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="portfolioUrl" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Portfolio / LinkedIn URL
                 </label>
                 <input
@@ -427,7 +427,7 @@ export default function ApplyPage() {
                   name="portfolioUrl"
                   value={form.portfolioUrl}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="https://linkedin.com/in/johndoe"
                 />
               </div>
@@ -435,8 +435,8 @@ export default function ApplyPage() {
           </div>
 
           {/* Role Details */}
-          <div className="bg-white rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8 space-y-5">
-            <h2 className="text-lg font-semibold text-surface-900 flex items-center gap-2">
+          <div className="bg-white dark:bg-surface-900/40 rounded-2xl border border-surface-100 dark:border-surface-800 shadow-sm p-6 sm:p-8 space-y-5">
+            <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-50 flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 text-sm font-bold">
                 2
               </span>
@@ -445,7 +445,7 @@ export default function ApplyPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label htmlFor="expectedSalary" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="expectedSalary" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Expected Salary
                 </label>
                 <input
@@ -454,12 +454,12 @@ export default function ApplyPage() {
                   name="expectedSalary"
                   value={form.expectedSalary}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="$120,000 - $150,000"
                 />
               </div>
               <div>
-                <label htmlFor="noticePeriod" className="block text-sm font-medium text-surface-700 mb-1.5">
+                <label htmlFor="noticePeriod" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                   Notice Period
                 </label>
                 <input
@@ -468,14 +468,14 @@ export default function ApplyPage() {
                   name="noticePeriod"
                   value={form.noticePeriod}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                  className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                   placeholder="2 weeks"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="coverLetter" className="block text-sm font-medium text-surface-700 mb-1.5">
+              <label htmlFor="coverLetter" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                 Cover Letter
               </label>
               <textarea
@@ -484,7 +484,7 @@ export default function ApplyPage() {
                 rows={5}
                 value={form.coverLetter}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400 resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400 resize-none"
                 placeholder="Tell us why you're interested in this position and what makes you a great fit..."
                 maxLength={5000}
               />
@@ -494,11 +494,11 @@ export default function ApplyPage() {
             </div>
             
             {customQuestions.length > 0 && (
-              <div className="pt-6 border-t border-surface-200 space-y-5">
-                <h3 className="text-sm font-semibold text-surface-900">Additional Questions</h3>
+              <div className="pt-6 border-t border-surface-200 dark:border-surface-700 space-y-5">
+                <h3 className="text-sm font-semibold text-surface-900 dark:text-surface-50">Additional Questions</h3>
                 {customQuestions.map((q, idx) => (
                   <div key={idx}>
-                    <label htmlFor={`custom_${q.question}`} className="block text-sm font-medium text-surface-700 mb-1.5">
+                    <label htmlFor={`custom_${q.question}`} className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
                       {q.question} {q.required && "*"}
                     </label>
                     {q.type === "textarea" ? (
@@ -509,7 +509,7 @@ export default function ApplyPage() {
                         value={form.customAnswers[q.question] || ""}
                         onChange={handleChange}
                         rows={3}
-                        className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400 resize-none"
+                        className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400 resize-none"
                       />
                     ) : (
                       <input
@@ -519,7 +519,7 @@ export default function ApplyPage() {
                         required={q.required}
                         value={form.customAnswers[q.question] || ""}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 placeholder:text-surface-400"
+                        className="w-full px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/50 focus:bg-white dark:focus:bg-surface-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-surface-50 placeholder:text-surface-400"
                       />
                     )}
                   </div>
@@ -529,8 +529,8 @@ export default function ApplyPage() {
           </div>
 
           {/* CV Upload */}
-          <div className="bg-white rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8 space-y-5">
-            <h2 className="text-lg font-semibold text-surface-900 flex items-center gap-2">
+          <div className="bg-white dark:bg-surface-900/40 rounded-2xl border border-surface-100 dark:border-surface-800 shadow-sm p-6 sm:p-8 space-y-5">
+            <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-50 flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 text-sm font-bold">
                 3
               </span>
@@ -543,7 +543,7 @@ export default function ApplyPage() {
                   ? "border-primary-400 bg-primary-50"
                   : cvFile
                     ? "border-success-400 bg-success-400/5"
-                    : "border-surface-200 hover:border-primary-300 hover:bg-primary-50/50"
+                    : "border-surface-200 dark:border-surface-700 hover:border-primary-300 hover:bg-primary-50/50"
               }`}
               onDragOver={(e) => {
                 e.preventDefault();
@@ -570,7 +570,7 @@ export default function ApplyPage() {
                     </svg>
                   </div>
                   <div className="text-left">
-                    <p className="font-medium text-surface-900">{cvFile.name}</p>
+                    <p className="font-medium text-surface-900 dark:text-surface-50">{cvFile.name}</p>
                     <p className="text-sm text-surface-500">
                       {(cvFile.size / 1024 / 1024).toFixed(2)} MB
                     </p>
@@ -595,7 +595,7 @@ export default function ApplyPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                   </div>
-                  <p className="font-medium text-surface-700 mb-1">
+                  <p className="font-medium text-surface-700 dark:text-surface-300 mb-1">
                     Drop your resume here or click to browse
                   </p>
                   <p className="text-sm text-surface-400">
