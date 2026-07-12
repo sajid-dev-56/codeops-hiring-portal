@@ -173,3 +173,12 @@ enum InterviewDecision {
   NO
   STRONG_NO
 }
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  type      String   @unique // NEW_APPLICATION, CONFIRMATION, INTERVIEW, OFFER, REJECTED
+  subject   String
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

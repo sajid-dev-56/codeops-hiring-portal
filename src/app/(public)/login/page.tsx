@@ -128,7 +128,7 @@ export default function LoginPage() {
         <div className="glass-dark rounded-2xl p-8 sm:p-10 shadow-2xl">
           <div className="text-center mb-8">
             <div className="w-24 h-24 mx-auto mb-4 rounded-xl flex items-center justify-center">
-              <Image src="/logo.png" alt="CodeOps Pro Logo" width={64} height={64} className="w-full h-full object-contain dark:bg-white dark:p-1 dark:rounded-xl" />
+              <Image src="/logo.png" alt="CodeOps Pro Logo" width={64} height={64} className="w-full h-full object-contain " />
             </div>
             <h1 className="text-2xl font-bold text-white mb-1">Login Portal</h1>
             <p className="text-surface-400 text-sm">

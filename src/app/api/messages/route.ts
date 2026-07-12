@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
               ${content}
             </blockquote>
             <p>
-              Log in to the <a href="${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/${senderRole === 'ADMIN' ? 'candidate' : 'admin'}">portal</a> to reply.
+              Log in to the <a href="${process.env.NEXTAUTH_URL || '${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://codeopspro.vercel.app"}'}/${senderRole === 'ADMIN' ? 'candidate' : 'admin'}">portal</a> to reply.
             </p>
           </div>
         `,
