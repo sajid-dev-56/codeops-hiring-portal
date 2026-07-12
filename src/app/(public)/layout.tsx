@@ -17,7 +17,8 @@ export default function PublicLayout({
             <Link href="/" className="flex items-center gap-2">
               <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={32} height={32} priority fetchPriority="high" className="h-8 w-auto object-contain" />
               <span className="font-bold text-lg text-surface-900 dark:text-white transition-colors duration-300">
-                CodeOps Hiring Portal
+                <span className="hidden sm:inline">CodeOps Hiring Portal</span>
+                <span className="sm:hidden">CodeOps</span>
               </span>
             </Link>
             <nav className="flex items-center gap-4 sm:gap-6">

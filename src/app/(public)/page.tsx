@@ -61,7 +61,7 @@ export default function HomePage() {
             We're actively hiring top talent
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold text-surface-900 dark:text-white tracking-tight leading-tight mb-8">
+          <h1 className="text-4xl md:text-7xl font-extrabold text-surface-900 dark:text-white tracking-tight leading-tight mb-8">
             Build the Future <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-accent-500">
               With CodeOps Pro
@@ -75,14 +75,14 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               href="/careers"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-lg shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:-translate-y-1 transition-all duration-300"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-lg shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:-translate-y-1 transition-all duration-300"
             >
               View Open Roles
               <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
             <Link
               href="#how-it-works"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-white dark:bg-surface-800 text-surface-900 dark:text-white font-semibold text-lg border border-surface-200 dark:border-surface-700 hover:border-primary-500 dark:hover:border-primary-500 hover:-translate-y-1 transition-all duration-300 shadow-sm"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 rounded-xl bg-white dark:bg-surface-800 text-surface-900 dark:text-white font-semibold text-lg border border-surface-200 dark:border-surface-700 hover:border-primary-500 dark:hover:border-primary-500 hover:-translate-y-1 transition-all duration-300 shadow-sm"
             >
               How It Works
             </Link>

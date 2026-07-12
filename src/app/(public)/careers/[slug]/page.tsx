@@ -79,7 +79,7 @@ export default async function JobDetailPage({ params }: Props) {
             </span>
           )}
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-900 mb-4">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-900 dark:text-white mb-4">
           {job.title}
         </h1>
         <div className="flex flex-wrap items-center gap-4 text-sm text-surface-500">
