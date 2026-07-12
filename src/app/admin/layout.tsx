@@ -124,7 +124,7 @@ export default function AdminLayout({
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg hover:bg-surface-100 text-surface-600"
+              className="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800/50 text-surface-600"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

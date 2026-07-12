@@ -229,7 +229,7 @@ export default function InterviewsClient({
                   {filteredInterviews.map((interview) => (
                     <tr
                       key={interview.id}
-                      className="hover:bg-surface-50 transition-colors"
+                      className="hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors"
                     >
                       <td className="px-4 py-3">
                         <Link

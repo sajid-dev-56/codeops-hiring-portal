@@ -72,7 +72,7 @@ export default async function JobsPage() {
               {jobs.map((job) => (
                 <tr
                   key={job.id}
-                  className="hover:bg-surface-50 transition-colors"
+                  className="hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors"
                 >
                   <td className="px-6 py-4">
                     <div>
@@ -110,7 +110,7 @@ export default async function JobsPage() {
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         href={`/admin/jobs/${job.id}/edit`}
-                        className="p-2 rounded-lg hover:bg-surface-100 text-surface-400 hover:text-surface-600 transition-colors"
+                        className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 text-surface-400 hover:text-surface-600 transition-colors"
                         title="Edit"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

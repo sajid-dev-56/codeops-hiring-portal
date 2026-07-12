@@ -174,7 +174,7 @@ async function DashboardStats() {
               <Link
                 key={candidate.id}
                 href={`/admin/candidates/${candidate.id}`}
-                className="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-50 transition-colors"
+                className="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors"
               >
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white font-semibold text-sm">
                   {candidate.name
