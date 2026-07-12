@@ -20,7 +20,7 @@ export default async function CandidateLayout({
           <div className="flex justify-between h-20 items-center">
             <div className="flex items-center gap-8">
               <Link href="/candidate" className="flex items-center gap-3 group">
-                <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={40} height={40} className="h-10 w-auto object-contain" />
+                <Image src="/logo.jpg" alt="CodeOps Pro Logo" width={40} height={40} priority fetchPriority="high" className="h-10 w-auto object-contain" />
                 <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-surface-900 to-surface-700 dark:from-white dark:to-surface-300">
                   CodeOps
                 </span>
