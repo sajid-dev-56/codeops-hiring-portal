@@ -13,7 +13,7 @@ if (globalForPrisma.prisma) {
 } else {
   const pool = new Pool({ 
     connectionString: process.env.DATABASE_URL,
-    max: 2, // limit max connections to prevent EMAXCONNSESSION on Vercel
+    max: 1, // Strictly limit to 1 connection per instance to prevent EMAXCONNSESSION
   });
   const adapter = new PrismaPg(pool);
   prisma = new PrismaClient({ adapter });
