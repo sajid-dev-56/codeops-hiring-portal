@@ -5,30 +5,27 @@ import { Suspense } from "react";
 export const dynamic = "force-dynamic";
 
 async function DashboardStats() {
-  const [jobCount, candidateCount, interviewCount, stageData, recentCandidates] =
-    await Promise.all([
-      prisma.job.count({ where: { status: "OPEN" } }),
-      prisma.candidate.count(),
-      prisma.interview.count({
-        where: {
-          interviewDate: {
-            gte: new Date(new Date().setHours(0, 0, 0, 0)),
-            lte: new Date(
-              new Date().setDate(new Date().getDate() + 7)
-            ),
-          },
-        },
-      }),
-      prisma.candidate.groupBy({
-        by: ["stage"],
-        _count: { stage: true },
-      }),
-      prisma.candidate.findMany({
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        include: { job: { select: { title: true } } },
-      }),
-    ]);
+  const jobCount = await prisma.job.count({ where: { status: "OPEN" } });
+  const candidateCount = await prisma.candidate.count();
+  const interviewCount = await prisma.interview.count({
+    where: {
+      interviewDate: {
+        gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        lte: new Date(
+          new Date().setDate(new Date().getDate() + 7)
+        ),
+      },
+    },
+  });
+  const stageData = await prisma.candidate.groupBy({
+    by: ["stage"],
+    _count: { stage: true },
+  });
+  const recentCandidates = await prisma.candidate.findMany({
+    take: 5,
+    orderBy: { createdAt: "desc" },
+    include: { job: { select: { title: true } } },
+  });
 
   const hiredCount =
     stageData.find((s) => s.stage === "HIRED")?._count.stage || 0;
