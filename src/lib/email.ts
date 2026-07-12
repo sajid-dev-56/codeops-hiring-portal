@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 // Create a Nodemailer transporter using Gmail
 const transporter = nodemailer.createTransport({

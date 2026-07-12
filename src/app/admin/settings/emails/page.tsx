@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import RichTextEditor from "@/components/RichTextEditor";
+import { RichTextEditor } from "@/components/RichTextEditor";
 import toast from "react-hot-toast";
 
 type EmailTemplateType = "NEW_APPLICATION" | "CONFIRMATION" | "INTERVIEW" | "OFFER" | "REJECTED";
@@ -190,7 +190,6 @@ export default function EmailSettingsPage() {
                 <RichTextEditor
                   content={body}
                   onChange={setBody}
-                  placeholder="Write your email content here. You can use variables listed above."
                 />
               </div>
             </div>
