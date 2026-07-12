@@ -23,11 +23,11 @@ export default function RunAiScreeningButton({ candidateId }: { candidateId: str
       <h3 className="text-sm font-semibold text-surface-700 mb-3 flex items-center gap-2">
         <span className="text-brand-600">✨</span> AI Screening Analysis
       </h3>
-      <div className="bg-surface-50 border border-surface-200 border-dashed rounded-xl p-6 text-center">
+      <div className="bg-surface-50 dark:bg-surface-800/50 border border-surface-200 border-dashed rounded-xl p-6 text-center">
         <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-brand-50 flex items-center justify-center">
           <span className="text-xl">✨</span>
         </div>
-        <h4 className="font-medium text-surface-900 mb-1">AI Screening Pending</h4>
+        <h4 className="font-medium text-surface-900 dark:text-white mb-1">AI Screening Pending</h4>
         <p className="text-sm text-surface-500 mb-4">
           Generate an AI-powered summary and match score for this candidate.
         </p>

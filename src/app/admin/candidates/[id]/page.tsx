@@ -74,7 +74,7 @@ export default async function CandidateDetailPage({ params }: Props) {
       </nav>
 
       {/* Header */}
-      <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6 sm:p-8">
+      <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 shadow-sm p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
             {candidate.name
@@ -86,7 +86,7 @@ export default async function CandidateDetailPage({ params }: Props) {
           </div>
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h1 className="text-2xl font-bold text-surface-900">
+              <h1 className="text-2xl font-bold text-surface-900 dark:text-white">
                 {candidate.name}
               </h1>
               <span
@@ -159,7 +159,7 @@ export default async function CandidateDetailPage({ params }: Props) {
                       {field.value}
                     </a>
                   ) : (
-                    <p className="text-sm text-surface-900">{field.value}</p>
+                    <p className="text-sm text-surface-900 dark:text-white">{field.value}</p>
                   )}
                 </div>
               </div>
@@ -208,7 +208,7 @@ export default async function CandidateDetailPage({ params }: Props) {
                   <h4 className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-2">Key Skills Detected</h4>
                   <div className="flex flex-wrap gap-2">
                     {candidate.aiSkills.map(skill => (
-                      <span key={skill} className="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-brand-700">
+                      <span key={skill} className="px-2.5 py-1 rounded-md bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl border border-brand-200 text-xs font-medium text-brand-700">
                         {skill}
                       </span>
                     ))}
@@ -227,7 +227,7 @@ export default async function CandidateDetailPage({ params }: Props) {
             <h3 className="text-sm font-semibold text-surface-700 mb-3">
               Cover Letter
             </h3>
-            <div className="bg-surface-50 rounded-xl p-4 text-sm text-surface-600 leading-relaxed whitespace-pre-wrap">
+            <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4 text-sm text-surface-600 leading-relaxed whitespace-pre-wrap">
               {candidate.coverLetter}
             </div>
           </div>

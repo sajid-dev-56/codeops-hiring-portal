@@ -27,7 +27,7 @@ export default function EditJobForm({ job }: { job: Job }) {
 
   return (
     <form action={formAction} className="space-y-6">
-      <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6 sm:p-8 space-y-5">
+      <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 shadow-sm p-6 sm:p-8 space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="sm:col-span-2">
             <label htmlFor="edit-title" className="block text-sm font-medium text-surface-700 mb-1.5">
@@ -39,7 +39,7 @@ export default function EditJobForm({ job }: { job: Job }) {
               name="title"
               required
               defaultValue={job.title}
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             />
           </div>
 
@@ -53,7 +53,7 @@ export default function EditJobForm({ job }: { job: Job }) {
               name="slug"
               required
               defaultValue={job.slug}
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             />
           </div>
 
@@ -67,7 +67,7 @@ export default function EditJobForm({ job }: { job: Job }) {
               name="department"
               required
               defaultValue={job.department}
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             />
           </div>
 
@@ -79,7 +79,7 @@ export default function EditJobForm({ job }: { job: Job }) {
               id="edit-status"
               name="status"
               defaultValue={job.status}
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             >
               <option value="OPEN">Open</option>
               <option value="ON_HOLD">On Hold</option>
@@ -95,7 +95,7 @@ export default function EditJobForm({ job }: { job: Job }) {
               id="edit-priority"
               name="priority"
               defaultValue={job.priority}
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             >
               <option value="LOW">Low</option>
               <option value="MEDIUM">Medium</option>
@@ -114,7 +114,7 @@ export default function EditJobForm({ job }: { job: Job }) {
               name="headcount"
               min={1}
               defaultValue={job.headcount}
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             />
           </div>
 
@@ -131,7 +131,7 @@ export default function EditJobForm({ job }: { job: Job }) {
                   ? new Date(job.targetStartDate).toISOString().split("T")[0]
                   : ""
               }
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 focus:bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none text-surface-900 dark:text-white"
             />
           </div>
 
@@ -146,7 +146,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           <div className="sm:col-span-2 pt-6 border-t border-surface-200">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-semibold text-surface-900">Custom Questions</h3>
+                <h3 className="text-lg font-semibold text-surface-900 dark:text-white">Custom Questions</h3>
                 <p className="text-sm text-surface-500">Add dynamic fields to the application form.</p>
               </div>
               <button
@@ -162,7 +162,7 @@ export default function EditJobForm({ job }: { job: Job }) {
 
             <div className="space-y-4">
               {customQuestions.map((q, idx) => (
-                <div key={idx} className="flex items-start gap-4 p-4 rounded-xl border border-surface-200 bg-surface-50/50">
+                <div key={idx} className="flex items-start gap-4 p-4 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50/50">
                   <div className="flex-1 space-y-4">
                     <div>
                       <label className="block text-xs font-medium text-surface-700 mb-1">Question Text</label>
@@ -188,7 +188,7 @@ export default function EditJobForm({ job }: { job: Job }) {
                             newQ[idx].type = e.target.value;
                             setCustomQuestions(newQ);
                           }}
-                          className="px-3 py-1.5 text-sm rounded-lg border border-surface-200 focus:border-primary-400 outline-none bg-white"
+                          className="px-3 py-1.5 text-sm rounded-lg border border-surface-200 focus:border-primary-400 outline-none bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl"
                         >
                           <option value="text">Short Text</option>
                           <option value="textarea">Long Text (Paragraph)</option>
@@ -237,7 +237,7 @@ export default function EditJobForm({ job }: { job: Job }) {
       <div className="flex items-center justify-end gap-3">
         <a
           href="/admin/jobs"
-          className="px-6 py-2.5 rounded-xl border border-surface-200 text-surface-600 font-medium text-sm hover:bg-surface-50 transition-colors"
+          className="px-6 py-2.5 rounded-xl border border-surface-200 text-surface-600 font-medium text-sm hover:bg-surface-50 dark:bg-surface-800/50 transition-colors"
         >
           Cancel
         </a>

@@ -106,7 +106,7 @@ export default function InterviewsClient({
       {/* Calendar View */}
       {view === "calendar" && (
         <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 dark:border-surface-800/50 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 overflow-hidden">
-          <div className="px-6 py-4 border-b border-surface-100 dark:border-surface-800/50 bg-surface-50">
+          <div className="px-6 py-4 border-b border-surface-100 dark:border-surface-800/50 bg-surface-50 dark:bg-surface-800/50">
             <h3 className="font-semibold text-surface-900 dark:text-white">
               This Week — {format(weekStart, "MMM d")} to{" "}
               {format(weekEnd, "MMM d, yyyy")}
@@ -123,7 +123,7 @@ export default function InterviewsClient({
                 <div key={day.toISOString()} className="min-h-[200px]">
                   <div
                     className={`px-3 py-2 text-center border-b border-surface-100 dark:border-surface-800/50 ${
-                      isToday ? "bg-primary-50" : "bg-surface-50"
+                      isToday ? "bg-primary-50 dark:bg-primary-900/20" : "bg-surface-50 dark:bg-surface-800/50"
                     }`}
                   >
                     <p className="text-xs text-surface-500 uppercase">
@@ -142,7 +142,7 @@ export default function InterviewsClient({
                       <Link
                         key={interview.id}
                         href={`/admin/candidates/${interview.candidateId}`}
-                        className="block p-2 rounded-lg bg-primary-50 border border-primary-100 hover:bg-primary-100 transition-colors"
+                        className="block p-2 rounded-lg bg-primary-50 dark:bg-primary-900/20 border border-primary-100 hover:bg-primary-100 transition-colors"
                       >
                         <p className="text-xs font-medium text-primary-800 truncate">
                           {interview.candidateName}
@@ -201,7 +201,7 @@ export default function InterviewsClient({
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-surface-100 dark:border-surface-800/50 bg-surface-50">
+                  <tr className="border-b border-surface-100 dark:border-surface-800/50 bg-surface-50 dark:bg-surface-800/50">
                     <th className="px-4 py-3 text-left text-xs font-semibold text-surface-500 uppercase">
                       Candidate
                     </th>
@@ -229,7 +229,7 @@ export default function InterviewsClient({
                   {filteredInterviews.map((interview) => (
                     <tr
                       key={interview.id}
-                      className="hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors"
+                      className="hover:bg-surface-50 dark:bg-surface-800/50 dark:hover:bg-surface-800/50 transition-colors"
                     >
                       <td className="px-4 py-3">
                         <Link

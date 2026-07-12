@@ -132,9 +132,9 @@ export default function CandidateDetailClient({
   return (
     <div className="space-y-6 mt-6">
       {/* CV Section */}
-      <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6 flex items-center justify-between">
+      <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 shadow-sm p-6 flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-surface-900 mb-1">Resume / CV</h2>
+          <h2 className="text-lg font-semibold text-surface-900 dark:text-white mb-1">Resume / CV</h2>
           <p className="text-sm text-surface-500">
             {cvFileKey ? "Download the candidate's resume" : "No resume uploaded"}
           </p>
@@ -143,7 +143,7 @@ export default function CandidateDetailClient({
           <button
             onClick={() => handleDownloadCV(false)}
             disabled={downloading || !cvFileKey}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-50 text-surface-700 font-medium text-sm hover:bg-surface-100 border border-surface-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-800/50 text-surface-700 font-medium text-sm hover:bg-surface-100 border border-surface-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -154,7 +154,7 @@ export default function CandidateDetailClient({
           <button
             onClick={() => handleDownloadCV(true)}
             disabled={downloading || !cvFileKey}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-50 text-primary-700 font-medium text-sm hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-50 dark:bg-primary-900/20 text-primary-700 font-medium text-sm hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -166,8 +166,8 @@ export default function CandidateDetailClient({
 
       {/* Custom Questions / Application Details */}
       {customAnswers && Object.keys(customAnswers).length > 0 && (
-        <div className="bg-white rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-surface-900 mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-2xl border border-surface-100 shadow-sm p-6 sm:p-8">
+          <h2 className="text-lg font-bold text-surface-900 dark:text-white mb-6 flex items-center gap-2">
             <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
@@ -177,7 +177,7 @@ export default function CandidateDetailClient({
             {Object.entries(customAnswers).map(([question, answer], idx) => (
               <div key={idx}>
                 <h3 className="text-sm font-semibold text-surface-700 mb-2">{question}</h3>
-                <p className="text-surface-600 bg-surface-50 p-4 rounded-xl text-sm whitespace-pre-wrap leading-relaxed">
+                <p className="text-surface-600 bg-surface-50 dark:bg-surface-800/50 p-4 rounded-xl text-sm whitespace-pre-wrap leading-relaxed">
                   {answer || <span className="italic text-surface-400">No answer provided</span>}
                 </p>
               </div>
@@ -187,14 +187,14 @@ export default function CandidateDetailClient({
       )}
 
       {/* Interviews Section */}
-      <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6">
+      <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-surface-900">
+          <h2 className="text-lg font-semibold text-surface-900 dark:text-white">
             Interviews ({serializedInterviews.length})
           </h2>
           <button
             onClick={() => setShowInterviewForm(!showInterviewForm)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-700 text-sm font-medium hover:bg-primary-100 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-700 text-sm font-medium hover:bg-primary-100 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -207,7 +207,7 @@ export default function CandidateDetailClient({
         {showInterviewForm && (
           <form
             onSubmit={handleCreateInterview}
-            className="mb-6 p-4 rounded-xl bg-surface-50 border border-surface-200 space-y-4"
+            className="mb-6 p-4 rounded-xl bg-surface-50 dark:bg-surface-800/50 border border-surface-200 space-y-4"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -221,7 +221,7 @@ export default function CandidateDetailClient({
                   onChange={(e) =>
                     setInterviewForm({ ...interviewForm, round: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900"
+                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900 dark:text-white"
                   placeholder="Technical Round 1"
                 />
               </div>
@@ -239,7 +239,7 @@ export default function CandidateDetailClient({
                       interviewer: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900"
+                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900 dark:text-white"
                   placeholder="Jane Smith"
                 />
               </div>
@@ -257,7 +257,7 @@ export default function CandidateDetailClient({
                       interviewDate: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900"
+                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900 dark:text-white"
                 />
               </div>
               <div>
@@ -275,7 +275,7 @@ export default function CandidateDetailClient({
                       score: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900"
+                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900 dark:text-white"
                 />
               </div>
               <div>
@@ -290,7 +290,7 @@ export default function CandidateDetailClient({
                       decision: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900"
+                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 text-surface-900 dark:text-white"
                 >
                   <option value="">Pending</option>
                   <option value="STRONG_YES">Strong Yes</option>
@@ -313,7 +313,7 @@ export default function CandidateDetailClient({
                       notes: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 resize-none text-surface-900"
+                  className="w-full px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:border-primary-400 resize-none text-surface-900 dark:text-white"
                   placeholder="Interview feedback..."
                 />
               </div>
@@ -322,14 +322,14 @@ export default function CandidateDetailClient({
               <button
                 type="button"
                 onClick={() => setShowInterviewForm(false)}
-                className="px-4 py-2 rounded-lg border border-surface-200 text-sm text-surface-600 hover:bg-surface-50"
+                className="px-4 py-2 rounded-lg border border-surface-200 text-sm text-surface-600 hover:bg-surface-50 dark:bg-surface-800/50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={savingInterview}
-                className="px-4 py-2 rounded-lg bg-primary-500 text-white text-sm font-medium hover:bg-primary-600 disabled:opacity-50"
+                className="px-4 py-2 rounded-lg bg-primary-50 dark:bg-primary-900/200 text-white text-sm font-medium hover:bg-primary-600 disabled:opacity-50"
               >
                 {savingInterview ? "Saving..." : "Save Interview"}
               </button>
@@ -347,16 +347,16 @@ export default function CandidateDetailClient({
           {serializedInterviews.map((interview) => (
             <div
               key={interview.id}
-              className="flex items-start gap-4 p-4 rounded-xl bg-surface-50 border border-surface-100"
+              className="flex items-start gap-4 p-4 rounded-xl bg-surface-50 dark:bg-surface-800/50 border border-surface-100"
             >
-              <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600 flex-shrink-0">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="font-medium text-sm text-surface-900">
+                  <p className="font-medium text-sm text-surface-900 dark:text-white">
                     {interview.round}
                   </p>
                   {interview.decision &&
@@ -400,8 +400,8 @@ export default function CandidateDetailClient({
       </div>
 
       {/* Notes Section */}
-      <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-surface-900 mb-4">
+      <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-surface-900 dark:text-white mb-4">
           Notes ({serializedNotes.length})
         </h2>
 
@@ -412,7 +412,7 @@ export default function CandidateDetailClient({
             value={noteContent}
             onChange={(e) => setNoteContent(e.target.value)}
             placeholder="Add a note..."
-            className="flex-1 px-4 py-2.5 rounded-xl border border-surface-200 bg-surface-50 text-sm outline-none focus:border-primary-400 text-surface-900 placeholder:text-surface-400"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-surface-200 bg-surface-50 dark:bg-surface-800/50 text-sm outline-none focus:border-primary-400 text-surface-900 dark:text-white placeholder:text-surface-400"
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -423,7 +423,7 @@ export default function CandidateDetailClient({
           <button
             onClick={handleAddNote}
             disabled={addingNote || !noteContent.trim()}
-            className="px-4 py-2.5 rounded-xl bg-primary-500 text-white text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 rounded-xl bg-primary-50 dark:bg-primary-900/200 text-white text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
           >
             {addingNote ? "..." : "Add"}
           </button>
@@ -439,7 +439,7 @@ export default function CandidateDetailClient({
           {serializedNotes.map((note) => (
             <div
               key={note.id}
-              className="p-3 rounded-xl bg-surface-50 border border-surface-100"
+              className="p-3 rounded-xl bg-surface-50 dark:bg-surface-800/50 border border-surface-100"
             >
               <p className="text-sm text-surface-700">{note.content}</p>
               <p className="text-xs text-surface-400 mt-2">
