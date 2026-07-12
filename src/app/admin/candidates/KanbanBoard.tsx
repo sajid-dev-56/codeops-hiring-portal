@@ -139,7 +139,7 @@ export default function KanbanBoard({
                           >
                             <Link
                               href={`/admin/candidates/${candidate.id}`}
-                              className="block bg-white rounded-lg border border-surface-100 p-4 shadow-sm hover:shadow-md hover:border-primary-200 transition-all"
+                              className="block bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-lg border border-surface-100 dark:border-surface-800/50 p-4 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 hover:shadow-md hover:border-primary-200 transition-all"
                             >
                               <div className="flex items-start gap-3">
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
@@ -151,7 +151,7 @@ export default function KanbanBoard({
                                     .slice(0, 2)}
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <p className="text-sm font-medium text-surface-900 truncate">
+                                  <p className="text-sm font-medium text-surface-900 dark:text-white truncate">
                                     {candidate.name}
                                   </p>
                                   <p className="text-xs text-surface-500 truncate">

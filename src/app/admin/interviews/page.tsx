@@ -34,7 +34,7 @@ export default async function InterviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-surface-900">Interviews</h1>
+        <h1 className="text-2xl font-bold text-surface-900 dark:text-white">Interviews</h1>
         <p className="text-surface-500 mt-1">
           {interviews.length} total interviews scheduled
         </p>

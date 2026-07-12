@@ -84,7 +84,7 @@ export default function InterviewsClient({
             onClick={() => setView("calendar")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               view === "calendar"
-                ? "bg-white text-surface-900 shadow-sm"
+                ? "bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl text-surface-900 dark:text-white shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50"
                 : "text-surface-500 hover:text-surface-700"
             }`}
           >
@@ -94,7 +94,7 @@ export default function InterviewsClient({
             onClick={() => setView("table")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               view === "table"
-                ? "bg-white text-surface-900 shadow-sm"
+                ? "bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl text-surface-900 dark:text-white shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50"
                 : "text-surface-500 hover:text-surface-700"
             }`}
           >
@@ -105,9 +105,9 @@ export default function InterviewsClient({
 
       {/* Calendar View */}
       {view === "calendar" && (
-        <div className="bg-white rounded-xl border border-surface-100 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-surface-100 bg-surface-50">
-            <h3 className="font-semibold text-surface-900">
+        <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 dark:border-surface-800/50 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 overflow-hidden">
+          <div className="px-6 py-4 border-b border-surface-100 dark:border-surface-800/50 bg-surface-50">
+            <h3 className="font-semibold text-surface-900 dark:text-white">
               This Week — {format(weekStart, "MMM d")} to{" "}
               {format(weekEnd, "MMM d, yyyy")}
             </h3>
@@ -122,7 +122,7 @@ export default function InterviewsClient({
               return (
                 <div key={day.toISOString()} className="min-h-[200px]">
                   <div
-                    className={`px-3 py-2 text-center border-b border-surface-100 ${
+                    className={`px-3 py-2 text-center border-b border-surface-100 dark:border-surface-800/50 ${
                       isToday ? "bg-primary-50" : "bg-surface-50"
                     }`}
                   >
@@ -131,7 +131,7 @@ export default function InterviewsClient({
                     </p>
                     <p
                       className={`text-lg font-semibold ${
-                        isToday ? "text-primary-600" : "text-surface-900"
+                        isToday ? "text-primary-600" : "text-surface-900 dark:text-white"
                       }`}
                     >
                       {format(day, "d")}
@@ -197,11 +197,11 @@ export default function InterviewsClient({
             </select>
           </div>
 
-          <div className="bg-white rounded-xl border border-surface-100 shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 dark:border-surface-800/50 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-surface-100 bg-surface-50">
+                  <tr className="border-b border-surface-100 dark:border-surface-800/50 bg-surface-50">
                     <th className="px-4 py-3 text-left text-xs font-semibold text-surface-500 uppercase">
                       Candidate
                     </th>

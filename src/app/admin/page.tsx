@@ -96,7 +96,7 @@ async function DashboardStats() {
           <Link
             key={i}
             href={stat.href}
-            className="animate-fade-in card-hover bg-white rounded-xl border border-surface-100 shadow-sm p-6"
+            className="animate-fade-in card-hover bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 dark:border-surface-800/50 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 p-6"
             style={{ animationDelay: `${i * 80}ms` }}
           >
             <div className="flex items-center justify-between mb-4">
@@ -114,8 +114,8 @@ async function DashboardStats() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Pipeline Overview */}
-        <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-surface-900 mb-4">
+        <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 dark:border-surface-800/50 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 p-6">
+          <h2 className="text-lg font-semibold text-surface-900 dark:text-white mb-4">
             Pipeline Overview
           </h2>
           <div className="space-y-3">
@@ -152,9 +152,9 @@ async function DashboardStats() {
         </div>
 
         {/* Recent Candidates */}
-        <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6">
+        <div className="bg-white dark:bg-surface-900/40 dark:backdrop-blur-xl rounded-xl border border-surface-100 dark:border-surface-800/50 shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)] dark:border-t-surface-700/50 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-surface-900">
+            <h2 className="text-lg font-semibold text-surface-900 dark:text-white">
               Recent Applications
             </h2>
             <Link
@@ -185,7 +185,7 @@ async function DashboardStats() {
                     .slice(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-surface-900 truncate">
+                  <p className="text-sm font-medium text-surface-900 dark:text-white truncate">
                     {candidate.name}
                   </p>
                   <p className="text-xs text-surface-500 truncate">
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-surface-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-surface-900 dark:text-white">Dashboard</h1>
         <p className="text-surface-500 mt-1">
           Overview of your hiring pipeline
         </p>
