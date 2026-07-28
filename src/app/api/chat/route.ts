@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ai } from "@/lib/gemini";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     const body = await req.json();
     const { messages, role } = body;
 
