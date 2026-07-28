@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { LogOut, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
-import FloatingChatbot from "@/components/chat/FloatingChatbot";
 
 export default async function CandidateLayout({
   children,
@@ -57,7 +56,6 @@ export default async function CandidateLayout({
       <main className="flex-1 w-full mx-auto py-10 px-4 sm:px-6 lg:px-8 max-w-7xl">
         {children}
       </main>
-      <FloatingChatbot role="CANDIDATE" />
     </div>
   );
 }

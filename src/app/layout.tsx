@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import FloatingChatbot from "@/components/chat/FloatingChatbot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -58,6 +59,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <FloatingChatbot />
           <SpeedInsights />
           <Analytics />
         </ThemeProvider>

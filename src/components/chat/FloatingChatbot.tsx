@@ -3,12 +3,16 @@
 import { useState, useRef, useEffect } from "react";
 import { Cat, X, Send, Loader2 } from "lucide-react";
 
+import { usePathname } from "next/navigation";
+
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
 
-export default function FloatingChatbot({ role }: { role: "ADMIN" | "CANDIDATE" }) {
+export default function FloatingChatbot() {
+  const pathname = usePathname();
+  const role = pathname?.startsWith("/admin") ? "ADMIN" : "CANDIDATE";
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
