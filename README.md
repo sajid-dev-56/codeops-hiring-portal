@@ -93,12 +93,30 @@ Use these credentials to explore the full admin dashboard:
 ### 🛡️ Platform-Wide
 | Feature | Description |
 |---------|-------------|
+| **🐈 JIYA AI Assistant** | Global, context-aware chatbot (Floating Cat Icon) that assists Admins with HR tasks and Candidates with portal navigation |
 | **🔐 Role-Based Auth** | NextAuth.js with JWT sessions, role-based middleware (Admin vs Candidate routes) |
 | **🌙 Dark Mode** | Full dark mode support across all pages with smooth transitions |
 | **📱 Responsive Design** | Works flawlessly on mobile, tablet, and desktop |
 | **⚡ Rate Limiting** | Upstash Redis rate limiting in production, in-memory fallback for development |
 | **🔍 SEO Optimized** | Dynamic sitemap, robots.txt, meta tags, and Open Graph support |
 | **📈 Analytics** | Vercel Analytics and Speed Insights integration |
+
+---
+
+## 🐈 JIYA — The Global AI Assistant
+
+**JIYA** is an intelligent, floating chatbot built directly into the portal to provide real-time, context-aware assistance to both the hiring team and the applicants.
+
+### Dynamic Context Switching
+JIYA automatically understands who she is talking to based on the active route:
+
+- **For Admins / HR:** When logged into the admin dashboard, JIYA acts as an **Expert HR Assistant**. She can help you draft professional rejection or offer emails, generate custom interview questions based on a specific candidate's resume, and provide best practices for tech interviews.
+- **For Candidates / Public:** When browsing jobs or checking application status, JIYA acts as a **Friendly Guide**. She helps candidates understand the hiring process, provides tips on how to prepare for interviews, and answers general queries about the company culture in a polite, encouraging tone.
+
+### Technical Highlights
+- **Powered by Google Gemini 2.5 Flash:** Ensures lightning-fast, high-quality conversational responses.
+- **Session-Based Memory:** Chat history is maintained securely within the active browser session and clears automatically upon closing the page for maximum privacy.
+- **Global Availability:** Integrated at the root layout level (`src/app/layout.tsx`), making the floating cat icon accessible from any page without redundant code.
 
 ---
 
@@ -284,6 +302,7 @@ hiring-portal/
 │   │   ├── candidate/         # Protected Candidate Portal
 │   │   │   └── page.tsx       # Progress tracker + messaging + interviews
 │   │   └── api/               # RESTful API routes
+│   │       ├── chat/          # JIYA AI Assistant chat endpoint
 │   │       ├── applications/  # Application submission endpoint
 │   │       ├── candidates/    # Candidate CRUD + stage updates
 │   │       ├── jobs/          # Job management endpoints
@@ -291,6 +310,8 @@ hiring-portal/
 │   │       ├── upload/        # Presigned URL generation for CV uploads
 │   │       └── email-templates/ # Template CRUD
 │   ├── components/
+│   │   ├── chat/
+│   │   │   └── FloatingChatbot.tsx # JIYA Global AI Assistant widget
 │   │   ├── ChatBox.tsx        # Two-way messaging component
 │   │   ├── RichTextEditor.tsx # TipTap WYSIWYG editor
 │   │   ├── theme-provider.tsx # Dark mode context provider
