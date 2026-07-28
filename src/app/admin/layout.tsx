@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import FloatingChatbot from "@/components/chat/FloatingChatbot";
 
 const navItems = [
   {
@@ -155,6 +156,7 @@ export default function AdminLayout({
         {/* Page content */}
         <main className="p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
+      <FloatingChatbot role="ADMIN" />
     </div>
   );
 }
