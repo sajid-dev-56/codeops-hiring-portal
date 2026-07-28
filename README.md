@@ -56,8 +56,8 @@ Use these credentials to explore the full admin dashboard:
 | Field    | Value                    |
 |----------|--------------------------|
 | **URL**  | [codeopspro.vercel.app/login](https://codeopspro.vercel.app/login) |
-| **Email** | `sajid@codeopspro.com`  |
-| **Password** | `Sajid@143`         |
+| **Email** | `hr@codeopspro.com`  |
+| **Password** | `codeopspro`         |
 
 > **Note:** After logging in, you will be redirected to the Admin Dashboard where you can manage jobs, view AI-analyzed candidates, use the Kanban pipeline, schedule interviews, and send messages.
 
