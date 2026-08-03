@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import StudentProfileClient from "./StudentProfileClient";
 
-export default async function StudentProfilePage({ params }: { params: { id: string } }) {
+export default async function StudentProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "INSTRUCTOR")) {
     redirect("/login");

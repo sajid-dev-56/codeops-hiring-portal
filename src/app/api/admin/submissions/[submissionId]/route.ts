@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { submissionId: string } }
+  { params }: { params: Promise<{ submissionId: string }> }
 ) {
   try {
     const session = await auth();
