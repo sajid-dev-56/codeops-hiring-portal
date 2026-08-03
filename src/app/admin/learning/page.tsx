@@ -112,3 +112,6 @@ export default async function AdminLearningDashboard() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

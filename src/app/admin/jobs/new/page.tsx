@@ -247,3 +247,6 @@ export default function NewJobPage() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

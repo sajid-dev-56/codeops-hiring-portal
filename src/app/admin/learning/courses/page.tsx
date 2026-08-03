@@ -105,3 +105,6 @@ export default async function AdminCoursesPage() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

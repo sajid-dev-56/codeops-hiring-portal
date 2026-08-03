@@ -61,3 +61,6 @@ export default async function AdminGradesPage() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

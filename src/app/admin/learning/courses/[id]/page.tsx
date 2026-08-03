@@ -125,3 +125,6 @@ export default async function AdminCourseDetailPage({ params }: Props) {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

@@ -50,3 +50,6 @@ export default async function AdminAnnouncementsPage() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

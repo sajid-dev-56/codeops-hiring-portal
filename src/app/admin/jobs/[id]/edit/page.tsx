@@ -22,3 +22,6 @@ export default async function EditJobPage({ params }: Props) {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

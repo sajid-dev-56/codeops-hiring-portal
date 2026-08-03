@@ -199,3 +199,6 @@ export default function EmailSettingsPage() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";

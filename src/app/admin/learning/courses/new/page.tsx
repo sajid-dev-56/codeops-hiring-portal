@@ -208,3 +208,6 @@ export default function NewCoursePage() {
     </div>
   );
 }
+
+
+export const dynamic = "force-dynamic";
