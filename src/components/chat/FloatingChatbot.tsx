@@ -64,13 +64,18 @@ export default function FloatingChatbot() {
         ...prev,
         { role: "assistant", content: "Sorry, I am having trouble connecting right now." },
       ]);
-    } finally {
-      setIsLoading(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    // Hide JIYA chatbot in the learning portal to avoid overlapping with the AI Mentor widget
+    if (pathname?.startsWith("/learn")) {
+      return null;
     }
-  };
-
-  return (
-    <div className="fixed bottom-6 right-6 z-50">
+  
+    return (
+      <div className="fixed bottom-6 right-6 z-50">
       {/* Chat Bubble Toggle Button */}
       {!isOpen && (
         <button

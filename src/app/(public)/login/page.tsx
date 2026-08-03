@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 function LoginForm() {
   const router = useRouter();
@@ -42,6 +43,10 @@ function LoginForm() {
         targetUrl = "/admin";
       } else if (session?.user?.role === "CANDIDATE") {
         targetUrl = "/candidate";
+      } else if (session?.user?.role === "STUDENT") {
+        targetUrl = "/learn/dashboard";
+      } else if (session?.user?.role === "INSTRUCTOR") {
+        targetUrl = "/instructor";
       }
 
       // If there's a valid callback url that matches their role path, use it
@@ -112,6 +117,13 @@ function LoginForm() {
           "Sign In"
         )}
       </button>
+
+      <div className="text-center mt-4">
+        <span className="text-surface-400 text-sm">Don't have an account? </span>
+        <Link href="/register" className="text-primary-400 text-sm hover:text-primary-300 font-medium">
+          Sign Up
+        </Link>
+      </div>
     </form>
   );
 }

@@ -111,3 +111,95 @@ export type CreateInterviewInput = z.infer<typeof createInterviewSchema>;
 export type CreateNoteInput = z.infer<typeof createNoteSchema>;
 export type PresignUploadInput = z.infer<typeof presignUploadSchema>;
 export type UpdateStageInput = z.infer<typeof updateStageSchema>;
+
+// ═══════════════════════════════════════════
+// LEARNING PORTAL SCHEMAS
+// ═══════════════════════════════════════════
+
+// Course schemas
+export const createCourseSchema = z.object({
+  title: z.string().min(2, "Title must be at least 2 characters").max(200),
+  slug: z
+    .string()
+    .min(2)
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Slug must be lowercase with hyphens only"
+    ),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  thumbnail: z.string().url("Invalid URL").optional().or(z.literal("")),
+  category: z.string().min(1, "Category is required"),
+  difficulty: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
+  isPublished: z.boolean().optional(),
+});
+
+export const updateCourseSchema = createCourseSchema.partial();
+
+// Lesson schemas
+export const createLessonSchema = z.object({
+  courseId: z.string().min(1, "Course ID is required"),
+  title: z.string().min(2, "Title must be at least 2 characters").max(200),
+  description: z.string().max(5000).optional().or(z.literal("")),
+  videoUrl: z.string().url("Invalid video URL").optional().or(z.literal("")),
+  videoType: z.enum(["DRIVE", "YOUTUBE", "EXTERNAL_LINK"]),
+  order: z.coerce.number().int().min(0).optional(),
+});
+
+export const updateLessonSchema = createLessonSchema.partial().omit({ courseId: true });
+
+// Task schemas
+export const createTaskSchema = z.object({
+  courseId: z.string().min(1, "Course ID is required"),
+  title: z.string().min(2, "Title must be at least 2 characters").max(200),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  maxMarks: z.coerce.number().int().min(1, "Max marks must be at least 1").max(1000),
+  dueDate: z.string().optional().nullable(),
+  order: z.coerce.number().int().min(0).optional(),
+});
+
+export const updateTaskSchema = createTaskSchema.partial().omit({ courseId: true });
+
+// Task submission schema (student submits links + short notes)
+export const taskSubmissionSchema = z.object({
+  taskId: z.string().min(1, "Task ID is required"),
+  content: z
+    .string()
+    .max(2000, "Note must be under 2000 characters")
+    .optional()
+    .or(z.literal("")),
+  linkUrl: z
+    .string()
+    .url("Invalid URL")
+    .optional()
+    .or(z.literal("")),
+});
+
+// Grading schema (admin/instructor grades a submission)
+export const gradeSubmissionSchema = z.object({
+  submissionId: z.string().min(1, "Submission ID is required"),
+  marks: z.coerce.number().int().min(0, "Marks cannot be negative"),
+  feedback: z.string().max(5000).optional().or(z.literal("")),
+  status: z.enum(["GRADED", "RESUBMIT"]),
+});
+
+// Announcement schema
+export const createAnnouncementSchema = z.object({
+  courseId: z.string().min(1, "Course ID is required"),
+  title: z.string().min(2, "Title must be at least 2 characters").max(200),
+  content: z.string().min(5, "Content must be at least 5 characters"),
+});
+
+// Enrollment schema
+export const enrollCourseSchema = z.object({
+  courseId: z.string().min(1, "Course ID is required"),
+});
+
+// Type exports
+export type CreateCourseInput = z.infer<typeof createCourseSchema>;
+export type CreateLessonInput = z.infer<typeof createLessonSchema>;
+export type CreateTaskInput = z.infer<typeof createTaskSchema>;
+export type TaskSubmissionInput = z.infer<typeof taskSubmissionSchema>;
+export type GradeSubmissionInput = z.infer<typeof gradeSubmissionSchema>;
+export type CreateAnnouncementInput = z.infer<typeof createAnnouncementSchema>;
+export type EnrollCourseInput = z.infer<typeof enrollCourseSchema>;
+

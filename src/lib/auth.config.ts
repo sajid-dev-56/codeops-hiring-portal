@@ -13,6 +13,7 @@ export const authConfig = {
       if (user) {
         token.id = user.id as string;
         token.role = user.role;
+        token.accountStatus = user.accountStatus;
       }
       return token;
     },
@@ -20,6 +21,7 @@ export const authConfig = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.accountStatus = token.accountStatus as string;
       }
       return session;
     },

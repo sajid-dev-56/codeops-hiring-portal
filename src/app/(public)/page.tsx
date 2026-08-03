@@ -1,6 +1,7 @@
+// ... existing imports ...
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { ArrowRight, Briefcase, Zap, Globe, Shield, Star, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Briefcase, Zap, Globe, Shield, Star, CheckCircle2, BookOpen } from "lucide-react";
 import { Suspense } from "react";
 
 export const revalidate = 60; // Revalidate every minute
@@ -44,6 +45,53 @@ async function FeaturedJobsList() {
   );
 }
 
+async function FeaturedCoursesList() {
+  const featuredCourses = await prisma.course.findMany({
+    where: { isPublished: true },
+    take: 3,
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: { lessons: true }
+      }
+    }
+  });
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featuredCourses.map((course) => (
+        <Link href={`/learn/courses/${course.slug}`} key={course.id} className="group">
+          <div className="h-full bg-surface-50 dark:bg-surface-800/80 rounded-2xl p-6 border border-surface-200 dark:border-surface-700 hover:border-accent-500/50 dark:hover:border-accent-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent-500/10 flex flex-col">
+            <div className="w-12 h-12 rounded-lg bg-accent-100 dark:bg-accent-900/50 text-accent-600 dark:text-accent-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <BookOpen className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-bold text-surface-900 dark:text-white mb-2 group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors line-clamp-2">
+              {course.title}
+            </h3>
+            <p className="text-sm text-surface-500 dark:text-surface-400 mb-6 line-clamp-2">
+              {course.description}
+            </p>
+            <div className="flex items-center gap-3 text-sm text-surface-500 dark:text-surface-400 mb-6 mt-auto">
+              <span className="px-2.5 py-1 rounded-md bg-surface-200 dark:bg-surface-700 capitalize">{course.category}</span>
+              <span>•</span>
+              <span className="capitalize">{course.difficulty.toLowerCase()}</span>
+            </div>
+            <div className="pt-4 border-t border-surface-200 dark:border-surface-700 flex items-center justify-between text-sm font-medium text-surface-900 dark:text-white">
+              View Course
+              <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-accent-500" />
+            </div>
+          </div>
+        </Link>
+      ))}
+      {featuredCourses.length === 0 && (
+        <div className="col-span-full text-center py-12 bg-surface-50 dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700">
+          <p className="text-surface-500 dark:text-surface-400">Exciting new courses coming soon!</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -72,13 +120,24 @@ export default function HomePage() {
             Join our team of passionate builders and creators. We use AI-driven matching to connect you with roles where you'll do the best work of your life.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
             <Link
               href="/careers"
               className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-lg shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:-translate-y-1 transition-all duration-300"
             >
               View Open Roles
               <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
+            <Link
+              href="/learn"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 rounded-xl bg-accent-600 hover:bg-accent-500 text-white font-semibold text-lg shadow-lg shadow-accent-500/30 hover:shadow-accent-500/50 hover:-translate-y-1 transition-all duration-300"
+            >
+              Learning Hub
+              <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+              </svg>
             </Link>
             <Link
               href="#how-it-works"
@@ -122,8 +181,40 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Featured Courses Section */}
+      <section className="py-24 bg-surface-50 dark:bg-surface-950 transition-colors duration-300 relative border-t border-surface-200 dark:border-surface-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-surface-900 dark:text-white mb-4">
+                Level Up Your Skills
+              </h2>
+              <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl">
+                Explore our featured courses and get ready to accelerate your career.
+              </p>
+            </div>
+            <Link
+              href="/learn/courses"
+              className="inline-flex items-center text-accent-600 dark:text-accent-400 font-medium hover:text-accent-700 dark:hover:text-accent-300 transition-colors"
+            >
+              View all courses <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+
+          <Suspense fallback={
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-[280px] bg-surface-100 dark:bg-surface-800/50 rounded-2xl p-6 border border-surface-200 dark:border-surface-700 animate-pulse" />
+              ))}
+            </div>
+          }>
+            <FeaturedCoursesList />
+          </Suspense>
+        </div>
+      </section>
+
       {/* Why Choose Us (Bento Box) */}
-      <section className="py-24 bg-surface-50 dark:bg-surface-950 transition-colors duration-300">
+      <section className="py-24 bg-white dark:bg-surface-900/50 transition-colors duration-300 border-t border-surface-200 dark:border-surface-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-surface-900 dark:text-white mb-4">

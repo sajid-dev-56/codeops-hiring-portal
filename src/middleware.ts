@@ -8,7 +8,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
   const user = req.auth?.user;
 
-  // Protect /admin routes
+  // Protect /admin routes — only ADMIN can access
   if (pathname.startsWith("/admin")) {
     if (!user) {
       const loginUrl = new URL("/login", req.url);
@@ -16,7 +16,9 @@ export default auth((req) => {
       return NextResponse.redirect(loginUrl);
     }
     if (user.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/candidate", req.url));
+      // Redirect to appropriate dashboard based on role
+      const redirectUrl = getRoleDashboard(user.role as string);
+      return NextResponse.redirect(new URL(redirectUrl, req.url));
     }
   }
 
@@ -28,14 +30,54 @@ export default auth((req) => {
       return NextResponse.redirect(loginUrl);
     }
     if (user.role !== "CANDIDATE") {
-      return NextResponse.redirect(new URL("/admin", req.url));
+      const redirectUrl = getRoleDashboard(user.role as string);
+      return NextResponse.redirect(new URL(redirectUrl, req.url));
+    }
+  }
+
+  // Protect /learn/dashboard routes — only STUDENT can access
+  if (pathname.startsWith("/learn/dashboard")) {
+    if (!user) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (user.role !== "STUDENT" && user.role !== "ADMIN" && user.role !== "INSTRUCTOR") {
+      return NextResponse.redirect(new URL("/candidate", req.url));
+    }
+  }
+
+  // Protect /instructor routes — only INSTRUCTOR and ADMIN can access
+  if (pathname.startsWith("/instructor")) {
+    if (!user) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (user.role !== "INSTRUCTOR" && user.role !== "ADMIN") {
+      const redirectUrl = getRoleDashboard(user.role as string);
+      return NextResponse.redirect(new URL(redirectUrl, req.url));
     }
   }
 
   return NextResponse.next();
 });
 
-export const config = {
-  matcher: ["/admin/:path*", "/candidate/:path*"],
-};
+function getRoleDashboard(role: string): string {
+  switch (role) {
+    case "ADMIN":
+      return "/admin";
+    case "CANDIDATE":
+      return "/candidate";
+    case "STUDENT":
+      return "/learn/dashboard";
+    case "INSTRUCTOR":
+      return "/instructor";
+    default:
+      return "/";
+  }
+}
 
+export const config = {
+  matcher: ["/admin/:path*", "/candidate/:path*", "/learn/dashboard/:path*", "/instructor/:path*"],
+};

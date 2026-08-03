@@ -20,6 +20,19 @@ model User {
   accounts       Account[]
   sessions       Session[]
   candidates     Candidate[]
+
+  // Learning Portal relations
+  enrollments       Enrollment[]
+  taskSubmissions   TaskSubmission[]
+  lessonCompletions LessonCompletion[]
+  dailyGoals        DailyGoal[]
+  mentorChats       MentorConversation[]
+
+  // Approval and Streaks
+  accountStatus    AccountStatus @default(PENDING)
+  lastActivityDate DateTime?
+  currentStreak    Int           @default(0)
+  longestStreak    Int           @default(0)
 }
 
 model Account {
@@ -136,9 +149,144 @@ model Message {
   createdAt   DateTime  @default(now())
 }
 
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  type      String   @unique // NEW_APPLICATION, CONFIRMATION, INTERVIEW, OFFER, REJECTED
+  subject   String
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ═══════════════════════════════════════════
+// LEARNING PORTAL MODELS
+// ═══════════════════════════════════════════
+
+model Course {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  description String     @db.Text
+  thumbnail   String?    // URL to course thumbnail image
+  category    String     // e.g., "Web Development", "Python", "DevOps"
+  difficulty  Difficulty @default(BEGINNER)
+  isPublished Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  lessons       Lesson[]
+  enrollments   Enrollment[]
+  tasks         Task[]
+  announcements Announcement[]
+}
+
+model Lesson {
+  id          String    @id @default(cuid())
+  courseId     String
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  description String?   @db.Text
+  videoUrl    String?   // Google Drive link or external URL
+  videoType   VideoType @default(DRIVE)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  completions LessonCompletion[]
+}
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrolledAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  courseId     String
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  description String    @db.Text
+  maxMarks    Int       @default(100)
+  dueDate     DateTime?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  submissions TaskSubmission[]
+}
+
+model TaskSubmission {
+  id          String           @id @default(cuid())
+  taskId      String
+  task        Task             @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content     String?          @db.Text  // Short note from student
+  linkUrl     String?          // External link (GitHub, LinkedIn, etc.)
+  status      SubmissionStatus @default(PENDING)
+  marks       Int?             // Assigned marks
+  aiMarks     Int?             // AI suggested marks
+  aiFeedback  String?          @db.Text  // AI generated feedback
+  feedback    String?          @db.Text  // Admin/Instructor feedback
+  submittedAt DateTime         @default(now())
+  gradedAt    DateTime?
+
+  @@unique([taskId, userId])  // One submission per task per student
+}
+
+model LessonCompletion {
+  id          String   @id @default(cuid())
+  lessonId    String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completedAt DateTime @default(now())
+
+  @@unique([lessonId, userId])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  courseId   String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title     String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+model DailyGoal {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text      String
+  completed Boolean  @default(false)
+  date      DateTime // To store which day the goal belongs to
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MentorConversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Json     // To store the chat history array
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ═══════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════
+
 enum Role {
   ADMIN
   CANDIDATE
+  STUDENT
+  INSTRUCTOR
 }
 
 enum JobStatus {
@@ -174,12 +322,27 @@ enum InterviewDecision {
   STRONG_NO
 }
 
-model EmailTemplate {
-  id        String   @id @default(cuid())
-  type      String   @unique // NEW_APPLICATION, CONFIRMATION, INTERVIEW, OFFER, REJECTED
-  subject   String
-  body      String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }
 
+enum VideoType {
+  DRIVE
+  YOUTUBE
+  EXTERNAL_LINK
+}
+
+enum SubmissionStatus {
+  PENDING
+  AI_GRADED
+  GRADED
+  RESUBMIT
+}
+
+enum AccountStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
