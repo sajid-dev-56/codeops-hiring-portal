@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Trophy, GraduationCap, Sparkles, Users } from "lu
 import { Suspense } from "react";
 import CourseCard from "@/components/learn/CourseCard";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function FeaturedCourses() {
   const courses = await prisma.course.findMany({

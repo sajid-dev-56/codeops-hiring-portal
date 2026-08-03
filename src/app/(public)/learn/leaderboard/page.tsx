@@ -4,7 +4,7 @@ import { Trophy } from "lucide-react";
 import LeaderboardTable from "@/components/learn/LeaderboardTable";
 import Link from "next/link";
 
-export const revalidate = 30;
+export const dynamic = "force-dynamic";
 
 async function LeaderboardData() {
   const submissions = await prisma.taskSubmission.findMany({

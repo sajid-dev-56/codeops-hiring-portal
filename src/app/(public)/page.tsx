@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { ArrowRight, Briefcase, Zap, Globe, Shield, Star, CheckCircle2, BookOpen } from "lucide-react";
 import { Suspense } from "react";
 
-export const revalidate = 60; // Revalidate every minute
+export const dynamic = "force-dynamic";
 
 async function FeaturedJobsList() {
   const featuredJobs = await prisma.job.findMany({

@@ -6,6 +6,8 @@ import AnnouncementCard from "@/components/learn/AnnouncementCard";
 import EnrollButton from "@/components/learn/EnrollButton";
 import { auth } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

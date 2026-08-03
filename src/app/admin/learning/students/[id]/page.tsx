@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import StudentProfileClient from "./StudentProfileClient";
+import StudentProfileClient from "@/app/admin/learning/students/[id]/StudentProfileClient";
 
 export default async function StudentProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();

@@ -3,7 +3,7 @@ import CourseCard from "@/components/learn/CourseCard";
 import { BookOpen, Search, Filter } from "lucide-react";
 import { Suspense } from "react";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 interface Props {
   searchParams: Promise<{ category?: string; difficulty?: string; search?: string }>;
