@@ -40,9 +40,22 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
     orderBy: { submittedAt: "desc" },
   });
 
+  const enrollments = await prisma.enrollment.findMany({
+    where: { userId: id },
+    include: {
+      course: {
+        include: {
+          tasks: {
+            orderBy: { order: "asc" },
+          },
+        },
+      },
+    },
+  });
+
   return (
     <div className="space-y-6">
-      <StudentProfileClient student={student as any} submissions={submissions as any} />
+      <StudentProfileClient student={student as any} submissions={submissions as any} enrollments={enrollments as any} />
     </div>
   );
 }

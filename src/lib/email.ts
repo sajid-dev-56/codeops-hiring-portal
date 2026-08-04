@@ -210,3 +210,48 @@ export async function sendStageChangeEmail({
     console.error("Failed to send stage change email:", error);
   }
 }
+
+export async function sendTaskExtensionEmail({
+  studentName,
+  studentEmail,
+  taskTitle,
+  courseTitle,
+  newDueDate,
+}: {
+  studentName: string;
+  studentEmail: string;
+  taskTitle: string;
+  courseTitle: string;
+  newDueDate: Date;
+}) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
+
+  const variables = {
+    studentName,
+    taskTitle,
+    courseTitle,
+    dueDate: newDueDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+    link: `${getAppUrl()}/learn/dashboard`
+  };
+
+  const defaultSubject = `Deadline Extended: ${taskTitle}`;
+  const defaultBody = `
+    <h2>Deadline Extended</h2>
+    <p>Hi {{studentName}},</p>
+    <p>Good news! Your deadline for the task <strong>{{taskTitle}}</strong> in <strong>{{courseTitle}}</strong> has been extended.</p>
+    <p>Your new deadline is: <strong>{{dueDate}}</strong>.</p>
+    <br/>
+    <a href="{{link}}" style="display: inline-block; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Go to Dashboard &rarr;</a>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `Hiring Portal <${process.env.GMAIL_USER}>`,
+      to: studentEmail,
+      subject: defaultSubject,
+      html: getHeader("🕒 Deadline Extended") + interpolate(defaultBody, variables) + getFooter(),
+    });
+  } catch (error) {
+    console.error("Failed to send task extension email:", error);
+  }
+}

@@ -7,32 +7,28 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  email          String    @unique
-  emailVerified  DateTime?
-  hashedPassword String?
-  name           String?
-  image          String?
-  role           Role      @default(CANDIDATE)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt @default(now())
-
-  accounts       Account[]
-  sessions       Session[]
-  candidates     Candidate[]
-
-  // Learning Portal relations
-  enrollments       Enrollment[]
-  taskSubmissions   TaskSubmission[]
-  lessonCompletions LessonCompletion[]
+  id                String               @id @default(cuid())
+  email             String               @unique
+  emailVerified     DateTime?
+  hashedPassword    String?
+  name              String?
+  image             String?
+  role              Role                 @default(CANDIDATE)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @default(now()) @updatedAt
+  accountStatus     AccountStatus        @default(PENDING)
+  currentStreak     Int                  @default(0)
+  lastActivityDate  DateTime?
+  longestStreak     Int                  @default(0)
+  accounts          Account[]
+  candidates        Candidate[]
   dailyGoals        DailyGoal[]
+  enrollments       Enrollment[]
+  lessonCompletions LessonCompletion[]
   mentorChats       MentorConversation[]
-
-  // Approval and Streaks
-  accountStatus    AccountStatus @default(PENDING)
-  lastActivityDate DateTime?
-  currentStreak    Int           @default(0)
-  longestStreak    Int           @default(0)
+  sessions          Session[]
+  taskExtensions    TaskExtension[]
+  taskSubmissions   TaskSubmission[]
 }
 
 model Account {
@@ -41,15 +37,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -71,26 +66,24 @@ model VerificationToken {
 }
 
 model Job {
-  id              String    @id @default(cuid())
+  id              String      @id @default(cuid())
   title           String
-  slug            String    @unique
+  slug            String      @unique
   department      String
-  status          JobStatus @default(OPEN)
-  priority        Priority  @default(MEDIUM)
-  headcount       Int       @default(1)
+  status          JobStatus   @default(OPEN)
+  priority        Priority    @default(MEDIUM)
+  headcount       Int         @default(1)
   targetStartDate DateTime?
-  description     String    @db.Text
+  description     String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
   customQuestions Json?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  candidates Candidate[]
+  candidates      Candidate[]
 }
 
 model Candidate {
   id             String         @id @default(cuid())
   jobId          String
-  job            Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
   stage          CandidateStage @default(APPLIED)
   name           String
   email          String
@@ -99,188 +92,189 @@ model Candidate {
   expectedSalary String?
   noticePeriod   String?
   portfolioUrl   String?
-  coverLetter    String?        @db.Text
+  coverLetter    String?
   cvFileKey      String?
   cvFileUrl      String?
-  customAnswers  Json?
   userId         String?
-  user           User?          @relation(fields: [userId], references: [id])
-
   aiScore        Int?
-  aiSummary      String?        @db.Text
+  aiSummary      String?
   aiSkills       String[]
-
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-
+  customAnswers  Json?
+  job            Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user           User?          @relation(fields: [userId], references: [id])
   interviews     Interview[]
-  notes          Note[]
   messages       Message[]
+  notes          Note[]
 }
 
 model Interview {
   id            String             @id @default(cuid())
   candidateId   String
-  candidate     Candidate          @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   round         String
   interviewer   String
   interviewDate DateTime
   score         Int?
   decision      InterviewDecision?
-  notes         String?            @db.Text
+  notes         String?
   createdAt     DateTime           @default(now())
+  candidate     Candidate          @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 }
 
 model Note {
   id          String    @id @default(cuid())
   candidateId String
-  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-  content     String    @db.Text
+  content     String
   author      String    @default("Admin")
   createdAt   DateTime  @default(now())
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 }
 
 model Message {
   id          String    @id @default(cuid())
   candidateId String
-  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   sender      Role
-  content     String    @db.Text
+  content     String
   createdAt   DateTime  @default(now())
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 }
 
 model EmailTemplate {
   id        String   @id @default(cuid())
-  type      String   @unique // NEW_APPLICATION, CONFIRMATION, INTERVIEW, OFFER, REJECTED
+  type      String   @unique
   subject   String
-  body      String   @db.Text
+  body      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// ═══════════════════════════════════════════
-// LEARNING PORTAL MODELS
-// ═══════════════════════════════════════════
-
 model Course {
-  id          String     @id @default(cuid())
-  title       String
-  slug        String     @unique
-  description String     @db.Text
-  thumbnail   String?    // URL to course thumbnail image
-  category    String     // e.g., "Web Development", "Python", "DevOps"
-  difficulty  Difficulty @default(BEGINNER)
-  isPublished Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  lessons       Lesson[]
-  enrollments   Enrollment[]
-  tasks         Task[]
+  id            String         @id @default(cuid())
+  title         String
+  slug          String         @unique
+  description   String
+  thumbnail     String?
+  category      String
+  difficulty    Difficulty     @default(BEGINNER)
+  isPublished   Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   announcements Announcement[]
+  enrollments   Enrollment[]
+  lessons       Lesson[]
+  tasks         Task[]
 }
 
 model Lesson {
-  id          String    @id @default(cuid())
-  courseId     String
-  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  id          String             @id @default(cuid())
+  courseId    String
   title       String
-  description String?   @db.Text
-  videoUrl    String?   // Google Drive link or external URL
-  videoType   VideoType @default(DRIVE)
-  order       Int       @default(0)
-  createdAt   DateTime  @default(now())
-
+  description String?
+  videoUrl    String?
+  videoType   VideoType          @default(DRIVE)
+  order       Int                @default(0)
+  createdAt   DateTime           @default(now())
+  course      Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
   completions LessonCompletion[]
 }
 
 model Enrollment {
   id         String   @id @default(cuid())
   userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId    String
-  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId   String
   enrolledAt DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
 }
 
 model Task {
-  id          String    @id @default(cuid())
-  courseId     String
-  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  id          String           @id @default(cuid())
+  courseId    String
   title       String
-  description String    @db.Text
-  maxMarks    Int       @default(100)
+  description String
+  maxMarks    Int              @default(100)
   dueDate     DateTime?
-  order       Int       @default(0)
-  createdAt   DateTime  @default(now())
-
+  order       Int              @default(0)
+  createdAt   DateTime         @default(now())
+  course      Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  extensions  TaskExtension[]
   submissions TaskSubmission[]
 }
 
 model TaskSubmission {
   id          String           @id @default(cuid())
   taskId      String
-  task        Task             @relation(fields: [taskId], references: [id], onDelete: Cascade)
   userId      String
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  content     String?          @db.Text  // Short note from student
-  linkUrl     String?          // External link (GitHub, LinkedIn, etc.)
+  content     String?
+  linkUrl     String?
   status      SubmissionStatus @default(PENDING)
-  marks       Int?             // Assigned marks
-  aiMarks     Int?             // AI suggested marks
-  aiFeedback  String?          @db.Text  // AI generated feedback
-  feedback    String?          @db.Text  // Admin/Instructor feedback
+  marks       Int?
+  aiMarks     Int?
+  aiFeedback  String?
+  feedback    String?
   submittedAt DateTime         @default(now())
   gradedAt    DateTime?
+  task        Task             @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([taskId, userId])  // One submission per task per student
+  @@unique([taskId, userId])
+}
+
+model TaskExtension {
+  id        String   @id @default(cuid())
+  taskId    String
+  userId    String
+  dueDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, userId])
 }
 
 model LessonCompletion {
   id          String   @id @default(cuid())
   lessonId    String
-  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   completedAt DateTime @default(now())
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([lessonId, userId])
 }
 
 model Announcement {
   id        String   @id @default(cuid())
-  courseId   String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
   title     String
-  content   String   @db.Text
+  content   String
   createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model DailyGoal {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   text      String
   completed Boolean  @default(false)
-  date      DateTime // To store which day the goal belongs to
+  date      DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model MentorConversation {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages  Json     // To store the chat history array
+  messages  Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
-// ═══════════════════════════════════════════
-// ENUMS
-// ═══════════════════════════════════════════
 
 enum Role {
   ADMIN

@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { lessonId } = await req.json();
+    const { lessonId, completed = true } = await req.json();
 
     if (!lessonId) {
       return NextResponse.json({ error: "Lesson ID is required" }, { status: 400 });
@@ -39,22 +39,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "You must be enrolled in this course" }, { status: 403 });
     }
 
-    // Upsert completion
-    const completion = await prisma.lessonCompletion.upsert({
-      where: {
-        lessonId_userId: {
+    if (completed === false) {
+      await prisma.lessonCompletion.deleteMany({
+        where: {
           lessonId,
           userId: session.user.id,
         },
-      },
-      update: {},
-      create: {
-        lessonId,
-        userId: session.user.id,
-      },
-    });
-
-    return NextResponse.json(completion);
+      });
+      return NextResponse.json({ success: true, status: "removed" });
+    } else {
+      // Upsert completion
+      const completion = await prisma.lessonCompletion.upsert({
+        where: {
+          lessonId_userId: {
+            lessonId,
+            userId: session.user.id,
+          },
+        },
+        update: {},
+        create: {
+          lessonId,
+          userId: session.user.id,
+        },
+      });
+      return NextResponse.json(completion);
+    }
   } catch (error) {
     console.error("Failed to mark progress:", error);
     return NextResponse.json({ error: "Failed to mark progress" }, { status: 500 });

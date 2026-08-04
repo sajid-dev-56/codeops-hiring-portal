@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BookOpen, ListTodo, Plus, Users, Eye, EyeOff } from "lucide-react";
 import AddLessonForm from "./AddLessonForm";
 import AddTaskForm from "./AddTaskForm";
+import EditTaskForm from "./EditTaskForm";
 import CourseActionsClient from "./CourseActionsClient";
 
 interface Props {
@@ -106,13 +107,16 @@ export default async function AdminCourseDetailPage({ params }: Props) {
           {course.tasks.length > 0 && (
             <div className="space-y-2 mb-4">
               {course.tasks.map((task, index) => (
-                <div key={task.id} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800">
-                  <div className="w-7 h-7 rounded-full bg-accent-100 dark:bg-accent-900/50 text-accent-600 dark:text-accent-400 flex items-center justify-center text-xs font-bold flex-shrink-0">
-                    T{index + 1}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-surface-900 dark:text-white truncate">{task.title}</p>
-                    <p className="text-xs text-surface-400">Max: {task.maxMarks} marks</p>
+                <div key={task.id} className="flex flex-col p-3 rounded-xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full bg-accent-100 dark:bg-accent-900/50 text-accent-600 dark:text-accent-400 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      T{index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-surface-900 dark:text-white truncate">{task.title}</p>
+                      <p className="text-xs text-surface-400">Max: {task.maxMarks} marks {task.dueDate && `• Due: ${new Date(task.dueDate).toLocaleDateString()}`}</p>
+                    </div>
+                    <EditTaskForm task={task} />
                   </div>
                 </div>
               ))}

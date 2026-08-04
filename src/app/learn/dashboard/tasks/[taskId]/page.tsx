@@ -76,6 +76,9 @@ export default async function TaskDetailPage({ params }: Props) {
       submissions: {
         where: { userId },
       },
+      extensions: {
+        where: { userId },
+      },
     },
   });
 
@@ -114,8 +117,11 @@ export default async function TaskDetailPage({ params }: Props) {
   }
 
   const submission = task.submissions[0] || null;
+  const extension = task.extensions[0] || null;
   const statusBadge = getSubmissionStatusBadge(submission?.status);
-  const dueInfo = task.dueDate ? getDueStatusInfo(new Date(task.dueDate)) : null;
+  
+  const effectiveDueDate = extension ? extension.dueDate : task.dueDate;
+  const dueInfo = effectiveDueDate ? getDueStatusInfo(new Date(effectiveDueDate)) : null;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
@@ -173,12 +179,17 @@ export default async function TaskDetailPage({ params }: Props) {
           </div>
           <div>
             <p className="text-xs text-surface-500 dark:text-surface-400 uppercase tracking-wider font-medium">Due Date</p>
-            {task.dueDate ? (
+            {effectiveDueDate ? (
               <>
                 <p className={`text-sm font-bold ${dueInfo?.color || ""}`}>
-                  {new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                  {new Date(effectiveDueDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 </p>
-                <p className={`text-xs mt-0.5 ${dueInfo?.color || "text-surface-400"}`}>{dueInfo?.sublabel}</p>
+                {extension && (
+                  <p className="text-xs text-primary-500 mt-0.5">Extended Deadline</p>
+                )}
+                {!extension && (
+                  <p className={`text-xs mt-0.5 ${dueInfo?.color || "text-surface-400"}`}>{dueInfo?.sublabel}</p>
+                )}
               </>
             ) : (
               <p className="text-sm font-medium text-surface-400">No deadline</p>
@@ -207,7 +218,7 @@ export default async function TaskDetailPage({ params }: Props) {
         taskTitle={task.title}
         maxMarks={task.maxMarks}
         description={task.description}
-        dueDate={task.dueDate}
+        dueDate={effectiveDueDate}
         showDetails={true}
         existingSubmission={submission}
       />

@@ -5,17 +5,21 @@ import { ArrowLeft, User, Calendar, Trash2, Edit } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import GradeModal from "./GradeModal";
+import TaskExtensionModal from "./TaskExtensionModal";
 
 export default function StudentProfileClient({
   student,
   submissions,
+  enrollments,
 }: {
   student: any;
   submissions: any[];
+  enrollments: any[];
 }) {
   const router = useRouter();
   const [localSubmissions, setLocalSubmissions] = useState(submissions);
   const [editingSubmission, setEditingSubmission] = useState<any | null>(null);
+  const [isExtensionModalOpen, setIsExtensionModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteStudent = async () => {
@@ -62,14 +66,22 @@ export default function StudentProfileClient({
             <p className="text-surface-500 dark:text-surface-400 mt-1">Manage submissions and grades</p>
           </div>
         </div>
-        <button
-          onClick={handleDeleteStudent}
-          disabled={isDeleting}
-          className="flex items-center gap-2 px-4 py-2 bg-error-50 dark:bg-error-500/10 text-error-600 dark:text-error-400 rounded-xl hover:bg-error-100 dark:hover:bg-error-500/20 transition-colors text-sm font-medium disabled:opacity-50"
-        >
-          <Trash2 className="w-4 h-4" />
-          {isDeleting ? "Deleting..." : "Delete Student"}
-        </button>
+          <button
+            onClick={() => setIsExtensionModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-500/20 transition-colors text-sm font-medium"
+          >
+            <Calendar className="w-4 h-4" />
+            Extend Deadline
+          </button>
+          <button
+            onClick={handleDeleteStudent}
+            disabled={isDeleting}
+            className="flex items-center gap-2 px-4 py-2 bg-error-50 dark:bg-error-500/10 text-error-600 dark:text-error-400 rounded-xl hover:bg-error-100 dark:hover:bg-error-500/20 transition-colors text-sm font-medium disabled:opacity-50"
+          >
+            <Trash2 className="w-4 h-4" />
+            {isDeleting ? "Deleting..." : "Delete Student"}
+          </button>
+        </div>
       </div>
 
       {/* Profile Summary */}
@@ -179,6 +191,13 @@ export default function StudentProfileClient({
         submission={editingSubmission}
         onClose={() => setEditingSubmission(null)}
         onSuccess={handleGradeUpdate}
+      />
+
+      <TaskExtensionModal
+        isOpen={isExtensionModalOpen}
+        onClose={() => setIsExtensionModalOpen(false)}
+        studentId={student.id}
+        enrollments={enrollments}
       />
     </div>
   );

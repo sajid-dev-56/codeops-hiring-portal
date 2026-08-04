@@ -36,8 +36,20 @@ export async function POST(
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
 
+    // Check for task extension
+    const extension = await prisma.taskExtension.findUnique({
+      where: {
+        taskId_userId: {
+          taskId,
+          userId: session.user.id,
+        },
+      },
+    });
+
+    const effectiveDueDate = extension ? extension.dueDate : task.dueDate;
+
     // Check if task is overdue
-    if (task.dueDate && new Date(task.dueDate).getTime() < new Date().getTime()) {
+    if (effectiveDueDate && new Date(effectiveDueDate).getTime() < new Date().getTime()) {
       return NextResponse.json({ error: "Submission closed. Task is overdue." }, { status: 403 });
     }
 
@@ -69,7 +81,7 @@ export async function POST(
 
     if (existingSubmission) {
       // Allow resubmission if status is RESUBMIT or if the deadline hasn't passed yet
-      const hasTimeLeft = task.dueDate && new Date(task.dueDate).getTime() > new Date().getTime();
+      const hasTimeLeft = effectiveDueDate && new Date(effectiveDueDate).getTime() > new Date().getTime();
 
       if (existingSubmission.status !== "RESUBMIT" && !hasTimeLeft) {
         return NextResponse.json({ error: "You have already submitted this task" }, { status: 409 });
