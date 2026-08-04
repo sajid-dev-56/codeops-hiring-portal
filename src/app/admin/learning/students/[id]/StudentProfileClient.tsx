@@ -66,6 +66,7 @@ export default function StudentProfileClient({
             <p className="text-surface-500 dark:text-surface-400 mt-1">Manage submissions and grades</p>
           </div>
         </div>
+        <div className="flex items-center gap-3">
           <button
             onClick={() => setIsExtensionModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-500/20 transition-colors text-sm font-medium"
