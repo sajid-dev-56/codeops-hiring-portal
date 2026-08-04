@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, CheckCircle2, Circle, ListTodo, Megaphone } from "lucide-react";
+import { BookOpen, CheckCircle2, Circle, ListTodo, Megaphone, ChevronRight, Calendar, Clock, Award, AlertTriangle } from "lucide-react";
 import VideoPlayer from "@/components/learn/VideoPlayer";
-import TaskSubmissionForm from "@/components/learn/TaskSubmissionForm";
+
 import AnnouncementCard from "@/components/learn/AnnouncementCard";
 import ProgressBar from "@/components/learn/ProgressBar";
 import EnrollButton from "./EnrollButton";
@@ -128,17 +128,64 @@ export default async function EnrolledCoursePage({ params, searchParams }: Props
                 <ListTodo className="w-5 h-5 text-accent-500" />
                 Tasks & Assignments
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {course.tasks.map((task) => {
                   const submission = task.submissions[0] || null;
+                  const status = submission?.status;
+                  const dueDate = task.dueDate ? new Date(task.dueDate) : null;
+                  const isOverdue = dueDate ? dueDate.getTime() < Date.now() : false;
+                  const isDueSoon = dueDate ? (dueDate.getTime() - Date.now()) / (1000 * 60 * 60) <= 48 && !isOverdue : false;
+
+                  // Status badge config
+                  let statusLabel = "Not Submitted";
+                  let statusBg = "bg-surface-500/10";
+                  let statusColor = "text-surface-500 dark:text-surface-400";
+                  if (status === "GRADED") { statusLabel = `Graded: ${submission?.marks}/${task.maxMarks}`; statusBg = "bg-success-500/10"; statusColor = "text-success-600 dark:text-success-400"; }
+                  else if (status === "AI_GRADED") { statusLabel = "AI Graded"; statusBg = "bg-primary-500/10"; statusColor = "text-primary-600 dark:text-primary-400"; }
+                  else if (status === "PENDING") { statusLabel = "Pending Review"; statusBg = "bg-amber-500/10"; statusColor = "text-amber-600 dark:text-amber-400"; }
+                  else if (status === "RESUBMIT") { statusLabel = "Resubmit"; statusBg = "bg-warning-500/10"; statusColor = "text-warning-600 dark:text-warning-400"; }
+
                   return (
-                    <TaskSubmissionForm
+                    <Link
                       key={task.id}
-                      taskId={task.id}
-                      taskTitle={task.title}
-                      maxMarks={task.maxMarks}
-                      existingSubmission={submission}
-                    />
+                      href={`/learn/dashboard/tasks/${task.id}`}
+                      className="group block bg-white dark:bg-surface-900 rounded-2xl border border-surface-200 dark:border-surface-800 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="flex items-center gap-4 px-5 py-4">
+                        {/* Task Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-1">
+                            <h3 className="font-semibold text-surface-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                              {task.title}
+                            </h3>
+                            <span className={`inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-full flex-shrink-0 ${statusBg} ${statusColor}`}>
+                              {statusLabel}
+                            </span>
+                          </div>
+                          {task.description && (
+                            <p className="text-sm text-surface-500 dark:text-surface-400 line-clamp-2 mb-2">
+                              {task.description}
+                            </p>
+                          )}
+                          <div className="flex flex-wrap items-center gap-3 text-xs text-surface-400">
+                            <span className="inline-flex items-center gap-1">
+                              <Award className="w-3.5 h-3.5" />
+                              {task.maxMarks} marks
+                            </span>
+                            {dueDate && (
+                              <span className={`inline-flex items-center gap-1 ${isOverdue ? "text-danger-500" : isDueSoon ? "text-warning-500" : ""}`}>
+                                {isOverdue ? <AlertTriangle className="w-3.5 h-3.5" /> : isDueSoon ? <Clock className="w-3.5 h-3.5" /> : <Calendar className="w-3.5 h-3.5" />}
+                                {isOverdue ? "Overdue" : isDueSoon ? "Due soon" : ""}
+                                {" "}
+                                {dueDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        {/* Arrow */}
+                        <ChevronRight className="w-5 h-5 text-surface-300 dark:text-surface-600 group-hover:text-primary-500 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                      </div>
+                    </Link>
                   );
                 })}
               </div>

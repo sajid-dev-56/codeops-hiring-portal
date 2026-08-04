@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Send, ExternalLink, Loader2 } from "lucide-react";
+import { Send, ExternalLink, Loader2, Clock, FileText, AlertTriangle } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface TaskSubmissionFormProps {
   taskId: string;
   taskTitle: string;
   maxMarks: number;
+  description?: string | null;
+  dueDate?: string | Date | null;
+  showDetails?: boolean;
   existingSubmission?: {
     id: string;
     content: string | null;
@@ -21,13 +24,28 @@ interface TaskSubmissionFormProps {
   onSubmitted?: () => void;
 }
 
+function getDueStatus(dueDate: Date) {
+  const now = new Date();
+  const diffMs = dueDate.getTime() - now.getTime();
+  const diffHours = diffMs / (1000 * 60 * 60);
+
+  if (diffMs < 0) return { label: "Overdue", color: "text-danger-600 dark:text-danger-400", bg: "bg-danger-500/10", icon: AlertTriangle };
+  if (diffHours <= 48) return { label: "Due Soon", color: "text-warning-600 dark:text-warning-400", bg: "bg-warning-500/10", icon: Clock };
+  return { label: "On Time", color: "text-success-600 dark:text-success-400", bg: "bg-success-500/10", icon: Clock };
+}
+
 export default function TaskSubmissionForm({
   taskId,
   taskTitle,
   maxMarks,
+  description,
+  dueDate,
+  showDetails = false,
   existingSubmission,
   onSubmitted,
 }: TaskSubmissionFormProps) {
+  const parsedDueDate = dueDate ? new Date(dueDate) : null;
+  const dueStatus = parsedDueDate ? getDueStatus(parsedDueDate) : null;
   const [linkUrl, setLinkUrl] = useState(existingSubmission?.linkUrl || "");
   const [content, setContent] = useState(existingSubmission?.content || "");
   const [loading, setLoading] = useState(false);
@@ -71,11 +89,32 @@ export default function TaskSubmissionForm({
     <div className="bg-white dark:bg-surface-900 rounded-2xl border border-surface-200 dark:border-surface-800 overflow-hidden">
       {/* Header */}
       <div className="px-6 py-4 border-b border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-800/50">
-        <h3 className="font-semibold text-surface-900 dark:text-white">{taskTitle}</h3>
-        <p className="text-sm text-surface-500 dark:text-surface-400 mt-1">
-          Maximum Marks: <span className="font-semibold text-primary-600 dark:text-primary-400">{maxMarks}</span>
-        </p>
+        <h3 className="font-semibold text-surface-900 dark:text-white text-lg">{taskTitle}</h3>
+        <div className="flex flex-wrap items-center gap-3 mt-2">
+          <span className="inline-flex items-center gap-1.5 text-sm text-surface-500 dark:text-surface-400">
+            Maximum Marks: <span className="font-semibold text-primary-600 dark:text-primary-400">{maxMarks}</span>
+          </span>
+          {dueStatus && parsedDueDate && (
+            <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${dueStatus.bg} ${dueStatus.color}`}>
+              <dueStatus.icon className="w-3.5 h-3.5" />
+              {dueStatus.label} — {parsedDueDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+            </span>
+          )}
+        </div>
       </div>
+
+      {/* Task Description — shown on detail page */}
+      {showDetails && description && (
+        <div className="px-6 py-5 border-b border-surface-200 dark:border-surface-800">
+          <div className="flex items-center gap-2 mb-3">
+            <FileText className="w-4 h-4 text-primary-500" />
+            <h4 className="text-sm font-semibold text-surface-700 dark:text-surface-300 uppercase tracking-wider">Task Instructions</h4>
+          </div>
+          <div className="prose prose-sm dark:prose-invert max-w-none text-surface-700 dark:text-surface-300 leading-relaxed whitespace-pre-line">
+            {description}
+          </div>
+        </div>
+      )}
 
       {/* Graded Status Banner */}
       {isGraded && (
