@@ -36,6 +36,11 @@ export async function POST(
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
 
+    // Check if task is overdue
+    if (task.dueDate && new Date(task.dueDate).getTime() < new Date().getTime()) {
+      return NextResponse.json({ error: "Submission closed. Task is overdue." }, { status: 403 });
+    }
+
     // Check if student is enrolled in the course
     const enrollment = await prisma.enrollment.findUnique({
       where: {
@@ -63,8 +68,10 @@ export async function POST(
     let submission;
 
     if (existingSubmission) {
-      // Allow resubmission only if status is RESUBMIT
-      if (existingSubmission.status !== "RESUBMIT") {
+      // Allow resubmission if status is RESUBMIT or if the deadline hasn't passed yet
+      const hasTimeLeft = task.dueDate && new Date(task.dueDate).getTime() > new Date().getTime();
+
+      if (existingSubmission.status !== "RESUBMIT" && !hasTimeLeft) {
         return NextResponse.json({ error: "You have already submitted this task" }, { status: 409 });
       }
 

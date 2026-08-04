@@ -55,6 +55,9 @@ export default function TaskSubmissionForm({
   const needsResubmit = existingSubmission?.status === "RESUBMIT";
   const isPending = existingSubmission?.status === "PENDING";
   const hasSubmitted = !!existingSubmission && !needsResubmit;
+  const isOverdue = parsedDueDate ? parsedDueDate.getTime() < new Date().getTime() : false;
+  const hasTimeLeft = parsedDueDate ? !isOverdue : false;
+  const canSubmit = (!hasSubmitted || needsResubmit || hasTimeLeft) && !isOverdue;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +171,7 @@ export default function TaskSubmissionForm({
       )}
 
       {/* Resubmit Banner */}
-      {needsResubmit && (
+      {needsResubmit && !isOverdue && (
         <div className="px-6 py-4 bg-warning-500/10 border-b border-warning-500/20">
           <p className="text-sm font-semibold text-warning-600 dark:text-warning-400">⚠️ Resubmission Required</p>
           <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
@@ -182,8 +185,18 @@ export default function TaskSubmissionForm({
         </div>
       )}
 
+      {/* Overdue Banner */}
+      {isOverdue && (
+        <div className="px-6 py-4 bg-danger-500/10 border-b border-danger-500/20">
+          <p className="text-sm font-semibold text-danger-600 dark:text-danger-400">🚨 Submission Closed</p>
+          <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+            The deadline for this task has passed. You can no longer submit or edit your submission.
+          </p>
+        </div>
+      )}
+
       {/* Submission Form */}
-      {(!hasSubmitted || needsResubmit) && (
+      {canSubmit && (
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Link Input */}
           <div>
@@ -234,7 +247,7 @@ export default function TaskSubmissionForm({
             ) : (
               <>
                 <Send className="w-5 h-5" />
-                {needsResubmit ? "Resubmit Task" : "Submit Task"}
+                {needsResubmit || hasSubmitted ? "Update Submission" : "Submit Task"}
               </>
             )}
           </button>
@@ -242,7 +255,7 @@ export default function TaskSubmissionForm({
       )}
 
       {/* Already Submitted (Pending) */}
-      {isPending && (
+      {isPending && !canSubmit && (
         <div className="p-6">
           <div className="text-center py-4">
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center">
