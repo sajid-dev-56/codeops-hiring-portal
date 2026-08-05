@@ -56,7 +56,7 @@ export default function TaskSubmissionForm({
   const isPending = existingSubmission?.status === "PENDING";
   const hasSubmitted = !!existingSubmission && !needsResubmit;
   const isOverdue = parsedDueDate ? parsedDueDate.getTime() < new Date().getTime() : false;
-  const hasTimeLeft = parsedDueDate ? !isOverdue : false;
+  const hasTimeLeft = parsedDueDate ? !isOverdue : true;
   const canSubmit = (!hasSubmitted || needsResubmit || hasTimeLeft) && !isOverdue;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,13 +65,19 @@ export default function TaskSubmissionForm({
       toast.error("Please provide a link or a note");
       return;
     }
+
+    let finalLinkUrl = linkUrl.trim();
+    if (finalLinkUrl && !/^https?:\/\//i.test(finalLinkUrl)) {
+      finalLinkUrl = `https://${finalLinkUrl}`;
+    }
+
     setLoading(true);
 
     try {
       const res = await fetch(`/api/learn/tasks/${taskId}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ taskId, linkUrl: linkUrl.trim(), content: content.trim() }),
+        body: JSON.stringify({ taskId, linkUrl: finalLinkUrl, content: content.trim() }),
       });
 
       if (!res.ok) {

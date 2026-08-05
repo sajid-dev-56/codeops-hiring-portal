@@ -81,7 +81,7 @@ export async function POST(
 
     if (existingSubmission) {
       // Allow resubmission if status is RESUBMIT or if the deadline hasn't passed yet
-      const hasTimeLeft = effectiveDueDate && new Date(effectiveDueDate).getTime() > new Date().getTime();
+      const hasTimeLeft = !effectiveDueDate || new Date(effectiveDueDate).getTime() > new Date().getTime();
 
       if (existingSubmission.status !== "RESUBMIT" && !hasTimeLeft) {
         return NextResponse.json({ error: "You have already submitted this task" }, { status: 409 });
