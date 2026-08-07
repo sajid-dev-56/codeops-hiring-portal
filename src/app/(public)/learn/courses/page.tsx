@@ -2,32 +2,42 @@ import { prisma } from "@/lib/prisma";
 import CourseCard from "@/components/learn/CourseCard";
 import { BookOpen, Search, Filter } from "lucide-react";
 import { Suspense } from "react";
+import { unstable_cache } from "next/cache";
 
-export const dynamic = "force-dynamic";
+// Remove force-dynamic to allow partial prerendering/caching of layout
+
 
 interface Props {
   searchParams: Promise<{ category?: string; difficulty?: string; search?: string }>;
 }
 
+const getCourses = unstable_cache(
+  async (category?: string, difficulty?: string, search?: string) => {
+    const where: Record<string, unknown> = { isPublished: true };
+
+    if (category) where.category = category;
+    if (difficulty) where.difficulty = difficulty;
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
+    return prisma.course.findMany({
+      where,
+      include: {
+        _count: { select: { lessons: true, enrollments: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  },
+  ['public-courses-list'],
+  { revalidate: 60, tags: ['courses'] }
+);
+
 async function CourseGrid({ category, difficulty, search }: { category?: string; difficulty?: string; search?: string }) {
-  const where: Record<string, unknown> = { isPublished: true };
-
-  if (category) where.category = category;
-  if (difficulty) where.difficulty = difficulty;
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: "insensitive" } },
-      { description: { contains: search, mode: "insensitive" } },
-    ];
-  }
-
-  const courses = await prisma.course.findMany({
-    where,
-    include: {
-      _count: { select: { lessons: true, enrollments: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const courses = await getCourses(category, difficulty, search);
 
   if (courses.length === 0) {
     return (
@@ -58,13 +68,21 @@ async function CourseGrid({ category, difficulty, search }: { category?: string;
   );
 }
 
+const getCategoryList = unstable_cache(
+  async () => {
+    const courses = await prisma.course.findMany({
+      where: { isPublished: true },
+      select: { category: true },
+      distinct: ["category"],
+    });
+    return courses.map((c) => c.category);
+  },
+  ['public-categories-list'],
+  { revalidate: 3600, tags: ['courses'] }
+);
+
 async function CategoryList() {
-  const courses = await prisma.course.findMany({
-    where: { isPublished: true },
-    select: { category: true },
-    distinct: ["category"],
-  });
-  return courses.map((c) => c.category);
+  return getCategoryList();
 }
 
 export default async function CoursesPage({ searchParams }: Props) {

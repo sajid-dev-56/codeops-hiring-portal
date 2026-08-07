@@ -3,15 +3,24 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ArrowRight, Briefcase, Zap, Globe, Shield, Star, CheckCircle2, BookOpen } from "lucide-react";
 import { Suspense } from "react";
+import { unstable_cache } from "next/cache";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
+
+const getFeaturedJobs = unstable_cache(
+  async () => {
+    return prisma.job.findMany({
+      where: { status: "OPEN" },
+      take: 3,
+      orderBy: { createdAt: "desc" },
+    });
+  },
+  ['featured-jobs'],
+  { revalidate: 60, tags: ['jobs'] }
+);
 
 async function FeaturedJobsList() {
-  const featuredJobs = await prisma.job.findMany({
-    where: { status: "OPEN" },
-    take: 3,
-    orderBy: { createdAt: "desc" },
-  });
+  const featuredJobs = await getFeaturedJobs();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -45,17 +54,25 @@ async function FeaturedJobsList() {
   );
 }
 
-async function FeaturedCoursesList() {
-  const featuredCourses = await prisma.course.findMany({
-    where: { isPublished: true },
-    take: 3,
-    orderBy: { createdAt: "desc" },
-    include: {
-      _count: {
-        select: { lessons: true }
+const getFeaturedCourses = unstable_cache(
+  async () => {
+    return prisma.course.findMany({
+      where: { isPublished: true },
+      take: 3,
+      orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: { lessons: true }
+        }
       }
-    }
-  });
+    });
+  },
+  ['featured-courses'],
+  { revalidate: 60, tags: ['courses'] }
+);
+
+async function FeaturedCoursesList() {
+  const featuredCourses = await getFeaturedCourses();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
