@@ -7,6 +7,7 @@ import CourseCard from "@/components/learn/CourseCard";
 import ProgressBar from "@/components/learn/ProgressBar";
 import DailyGoalsWidget from "@/components/learn/DailyGoalsWidget";
 import UpcomingDeadlinesWidget from "@/components/learn/UpcomingDeadlinesWidget";
+import RecentAnnouncementsWidget from "@/components/learn/RecentAnnouncementsWidget";
 
 export default async function StudentDashboard() {
   const session = await auth();
@@ -86,6 +87,18 @@ export default async function StudentDashboard() {
     },
   });
 
+  // Fetch recent announcements
+  const recentAnnouncements = await prisma.announcement.findMany({
+    where: {
+      course: { enrollments: { some: { userId } } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+    include: {
+      course: { select: { title: true, slug: true } }
+    }
+  });
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Welcome Header */}
@@ -126,10 +139,11 @@ export default async function StudentDashboard() {
         </div>
       </div>
 
-      {/* Dashboard Widgets (Goals & Deadlines) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Dashboard Widgets (Goals, Deadlines, Announcements) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <DailyGoalsWidget />
         <UpcomingDeadlinesWidget tasks={JSON.parse(JSON.stringify(upcomingTasks))} />
+        <RecentAnnouncementsWidget announcements={JSON.parse(JSON.stringify(recentAnnouncements))} />
       </div>
 
       {/* Enrolled Courses */}

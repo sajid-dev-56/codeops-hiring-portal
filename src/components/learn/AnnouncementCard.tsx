@@ -5,9 +5,10 @@ interface AnnouncementCardProps {
   title: string;
   content: string;
   createdAt: Date | string;
+  courseName?: string;
 }
 
-export default function AnnouncementCard({ title, content, createdAt }: AnnouncementCardProps) {
+export default function AnnouncementCard({ title, content, createdAt, courseName }: AnnouncementCardProps) {
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
 
   return (
@@ -21,6 +22,9 @@ export default function AnnouncementCard({ title, content, createdAt }: Announce
             <h4 className="font-semibold text-surface-900 dark:text-white truncate">{title}</h4>
             <span className="text-xs text-surface-400 dark:text-surface-500 flex-shrink-0">{timeAgo}</span>
           </div>
+          {courseName && (
+            <p className="text-xs text-primary-500 font-medium mb-1">{courseName}</p>
+          )}
           <p className="text-sm text-surface-600 dark:text-surface-400 whitespace-pre-line">{content}</p>
         </div>
       </div>
