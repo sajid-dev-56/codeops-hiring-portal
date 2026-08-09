@@ -5,6 +5,7 @@ import { BookOpen, ListTodo, Plus, Users, Eye, EyeOff } from "lucide-react";
 import AddLessonForm from "./AddLessonForm";
 import AddTaskForm from "./AddTaskForm";
 import EditTaskForm from "./EditTaskForm";
+import AddQuizForm from "./AddQuizForm";
 import CourseActionsClient from "./CourseActionsClient";
 
 interface Props {
@@ -19,6 +20,10 @@ export default async function AdminCourseDetailPage({ params }: Props) {
     include: {
       lessons: { orderBy: { order: "asc" } },
       tasks: { orderBy: { order: "asc" } },
+      quizzes: { 
+        orderBy: { order: "asc" },
+        include: { questions: true }
+      },
       _count: { select: { enrollments: true } },
     },
   });
@@ -66,7 +71,7 @@ export default async function AdminCourseDetailPage({ params }: Props) {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Lessons */}
         <div>
           <div className="flex items-center justify-between mb-4">
@@ -124,6 +129,39 @@ export default async function AdminCourseDetailPage({ params }: Props) {
           )}
 
           <AddTaskForm courseId={course.id} />
+        </div>
+
+        {/* Quizzes */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-surface-900 dark:text-white flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-success-500" />
+              Quizzes ({course.quizzes.length})
+            </h2>
+          </div>
+
+          {course.quizzes.length > 0 && (
+            <div className="space-y-2 mb-4">
+              {course.quizzes.map((quiz, index) => (
+                <div key={quiz.id} className="flex flex-col p-3 rounded-xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full bg-success-100 dark:bg-success-900/50 text-success-600 dark:text-success-400 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      Q{index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-surface-900 dark:text-white truncate">{quiz.title}</p>
+                      <p className="text-xs text-surface-400">{quiz.questions.length} Questions • {quiz.timeLimit}s/q</p>
+                    </div>
+                    <Link href={`/admin/learning/courses/${course.id}/quizzes/${quiz.id}`} className="text-xs font-medium text-primary-600 hover:text-primary-700">
+                      Manage
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <AddQuizForm courseId={course.id} />
         </div>
       </div>
     </div>

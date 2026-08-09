@@ -26,6 +26,7 @@ model User {
   enrollments       Enrollment[]
   lessonCompletions LessonCompletion[]
   mentorChats       MentorConversation[]
+  quizAttempts      QuizAttempt[]
   sessions          Session[]
   taskExtensions    TaskExtension[]
   taskSubmissions   TaskSubmission[]
@@ -164,6 +165,7 @@ model Course {
   enrollments   Enrollment[]
   lessons       Lesson[]
   tasks         Task[]
+  quizzes       Quiz[]
 }
 
 model Lesson {
@@ -177,6 +179,47 @@ model Lesson {
   createdAt   DateTime           @default(now())
   course      Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
   completions LessonCompletion[]
+}
+
+model Quiz {
+  id          String   @id @default(cuid())
+  courseId    String
+  title       String
+  description String?
+  timeLimit   Int      @default(20) // in seconds per question
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  questions   Question[]
+  attempts    QuizAttempt[]
+}
+
+model Question {
+  id            String   @id @default(cuid())
+  quizId        String
+  text          String
+  options       String   // JSON string of array
+  correctOption Int      // Index of the correct option
+  order         Int      @default(0)
+
+  quiz          Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizAttempt {
+  id          String   @id @default(cuid())
+  quizId      String
+  userId      String
+  score       Int?
+  strikes     Int      @default(0)
+  status      SubmissionStatus @default(PENDING) // PENDING, GRADED
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([quizId, userId])
 }
 
 model Enrollment {

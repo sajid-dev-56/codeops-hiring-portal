@@ -36,7 +36,16 @@ export default async function EnrolledCoursePage({ params, searchParams }: Props
         },
       },
       announcements: { orderBy: { createdAt: "desc" }, take: 5 },
-      _count: { select: { lessons: true, enrollments: true, tasks: true } },
+      quizzes: {
+        orderBy: { order: "asc" },
+        include: {
+          questions: true,
+          attempts: {
+            where: { userId },
+          },
+        },
+      },
+      _count: { select: { lessons: true, enrollments: true, tasks: true, quizzes: true } },
     },
   });
 
@@ -184,6 +193,69 @@ export default async function EnrolledCoursePage({ params, searchParams }: Props
                         </div>
                         {/* Arrow */}
                         <ChevronRight className="w-5 h-5 text-surface-300 dark:text-surface-600 group-hover:text-primary-500 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Quizzes */}
+          {course.quizzes && course.quizzes.length > 0 && (
+            <div>
+              <h2 className="text-xl font-bold text-surface-900 dark:text-white mb-4 flex items-center gap-2 mt-8">
+                <BookOpen className="w-5 h-5 text-success-500" />
+                Quizzes
+              </h2>
+              <div className="space-y-3">
+                {course.quizzes.map((quiz) => {
+                  const attempt = quiz.attempts[0] || null;
+                  const status = attempt?.status;
+                  
+                  let statusLabel = "Not Attempted";
+                  let statusBg = "bg-surface-500/10";
+                  let statusColor = "text-surface-500 dark:text-surface-400";
+                  
+                  if (status === "GRADED") { 
+                    statusLabel = `Score: ${attempt?.score}%`; 
+                    statusBg = attempt?.score && attempt.score >= 50 ? "bg-success-500/10" : "bg-danger-500/10"; 
+                    statusColor = attempt?.score && attempt.score >= 50 ? "text-success-600 dark:text-success-400" : "text-danger-600 dark:text-danger-400"; 
+                  }
+
+                  return (
+                    <Link
+                      key={quiz.id}
+                      href={`/learn/dashboard/courses/${slug}/quiz/${quiz.id}`}
+                      className="group block bg-white dark:bg-surface-900 rounded-2xl border border-surface-200 dark:border-surface-800 hover:border-success-300 dark:hover:border-success-700 hover:shadow-lg hover:shadow-success-500/5 transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="flex items-center gap-4 px-5 py-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-1">
+                            <h3 className="font-semibold text-surface-900 dark:text-white truncate group-hover:text-success-600 dark:group-hover:text-success-400 transition-colors">
+                              {quiz.title}
+                            </h3>
+                            <span className={`inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-full flex-shrink-0 ${statusBg} ${statusColor}`}>
+                              {statusLabel}
+                            </span>
+                          </div>
+                          {quiz.description && (
+                            <p className="text-sm text-surface-500 dark:text-surface-400 line-clamp-2 mb-2">
+                              {quiz.description}
+                            </p>
+                          )}
+                          <div className="flex flex-wrap items-center gap-3 text-xs text-surface-400">
+                            <span className="inline-flex items-center gap-1">
+                              <BookOpen className="w-3.5 h-3.5" />
+                              {quiz.questions.length} questions
+                            </span>
+                            <span className="inline-flex items-center gap-1">
+                              <Clock className="w-3.5 h-3.5" />
+                              {quiz.timeLimit}s per question
+                            </span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-surface-300 dark:text-surface-600 group-hover:text-success-500 group-hover:translate-x-1 transition-all flex-shrink-0" />
                       </div>
                     </Link>
                   );
