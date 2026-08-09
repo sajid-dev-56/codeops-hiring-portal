@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BookOpen, ListTodo, Plus, ChevronLeft } from "lucide-react";
 import AddQuestionForm from "./AddQuestionForm";
+import DeleteQuizButton from "./DeleteQuizButton";
 
 interface Props {
   params: Promise<{ id: string; quizId: string }>;
@@ -41,6 +42,10 @@ export default async function AdminQuizManagePage({ params }: Props) {
           <p className="text-sm text-surface-500 mt-2 ml-11">
             Time limit: {quiz.timeLimit} seconds per question.
           </p>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <DeleteQuizButton quizId={quiz.id} courseId={quiz.courseId} />
         </div>
       </div>
 
