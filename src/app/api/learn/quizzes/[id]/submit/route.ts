@@ -28,7 +28,7 @@ export async function POST(
 
     // Calculate score
     let score = 0;
-    quiz.questions.forEach((question) => {
+    quiz.questions.forEach((question: any) => {
       if (answers[question.id] === question.correctOption) {
         score += 1;
       }

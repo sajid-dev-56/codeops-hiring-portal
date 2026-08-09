@@ -11,7 +11,7 @@ export default function QuizPlayer({ quiz, courseSlug }: { quiz: any, courseSlug
   const [hasStarted, setHasStarted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(quiz.timeLimit);
+  const [timeLeft, setTimeLeft] = useState<number>(quiz.timeLimit || 20);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   
   // Anti-Cheat State
