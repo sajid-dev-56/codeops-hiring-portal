@@ -85,6 +85,7 @@ Use these credentials to explore the full admin dashboard:
 | **📚 Course Catalog** | Browse featured courses and view detailed curricula |
 | **🎯 Learning Dashboard** | Track daily goals, overall progress, and recent announcements |
 | **⏳ Automated Reminders** | **Vercel Cron Jobs** automatically send email warnings 1 day before assignment deadlines |
+| **🛡️ Smart Anti-Cheating Quizzes** | Secure quiz module with strict timers, tab-switch detection (Visibility API), copy-paste traps, and adversarial prompt injections (AI-breaking watermarks) |
 | **🤖 Mentor Chat Widget** | AI chatbot to assist students with course-related doubts |
 | **🏆 Leaderboards** | Gamified learning experience to compete with other students |
 
