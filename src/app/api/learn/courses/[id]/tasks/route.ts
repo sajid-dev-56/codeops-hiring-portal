@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { createTaskSchema } from "@/lib/validations";
+import { sendNewTaskEmail } from "@/lib/email";
 
 // GET /api/learn/courses/[id]/tasks
 export async function GET(
@@ -79,6 +80,35 @@ export async function POST(
         order: parsed.data.order ?? (lastTask ? lastTask.order + 1 : 0),
       },
     });
+
+    // Send email notification to enrolled students
+    try {
+      const course = await prisma.course.findUnique({
+        where: { id },
+        include: {
+          enrollments: {
+            include: { user: true }
+          }
+        }
+      });
+
+      if (course && course.enrollments.length > 0) {
+        const emailPromises = course.enrollments
+          .filter(e => e.user.email)
+          .map(e => sendNewTaskEmail({
+            studentName: e.user.name || "Student",
+            studentEmail: e.user.email!,
+            courseTitle: course.title,
+            taskTitle: task.title,
+            dueDate: task.dueDate
+          }));
+        
+        await Promise.allSettled(emailPromises);
+      }
+    } catch (emailError) {
+      console.error("Failed to send new task notifications:", emailError);
+      // We don't fail the request if emails fail
+    }
 
     return NextResponse.json(task, { status: 201 });
   } catch (error) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { createLessonSchema } from "@/lib/validations";
+import { sendNewLessonEmail } from "@/lib/email";
 
 // GET /api/learn/courses/[id]/lessons
 export async function GET(
@@ -60,6 +61,34 @@ export async function POST(
         order: parsed.data.order ?? (lastLesson ? lastLesson.order + 1 : 0),
       },
     });
+
+    // Send email notification to enrolled students
+    try {
+      const course = await prisma.course.findUnique({
+        where: { id },
+        include: {
+          enrollments: {
+            include: { user: true }
+          }
+        }
+      });
+
+      if (course && course.enrollments.length > 0) {
+        const emailPromises = course.enrollments
+          .filter(e => e.user.email)
+          .map(e => sendNewLessonEmail({
+            studentName: e.user.name || "Student",
+            studentEmail: e.user.email!,
+            courseTitle: course.title,
+            lessonTitle: lesson.title
+          }));
+        
+        await Promise.allSettled(emailPromises);
+      }
+    } catch (emailError) {
+      console.error("Failed to send new lesson notifications:", emailError);
+      // We don't fail the request if emails fail
+    }
 
     return NextResponse.json(lesson, { status: 201 });
   } catch (error) {

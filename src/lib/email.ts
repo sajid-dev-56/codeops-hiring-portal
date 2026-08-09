@@ -359,4 +359,81 @@ export async function sendCongratulationsEmail({
   }
 }
 
+export async function sendNewLessonEmail({
+  studentName,
+  studentEmail,
+  courseTitle,
+  lessonTitle,
+}: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  lessonTitle: string;
+}) {
+  const mailOptions = {
+    from: '"CodeOps Pro" <sajidrehman.dev@gmail.com>',
+    to: resolveEmail(studentEmail),
+    subject: `New Lesson Uploaded in ${courseTitle}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #4f46e5; text-align: center;">New Lesson Available! 📚</h2>
+        <p>Hi ${studentName},</p>
+        <p>A new lesson titled <strong>"${lessonTitle}"</strong> has been uploaded to your course <strong>${courseTitle}</strong>.</p>
+        <p>Head over to the academy to check it out and continue your learning journey.</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${getAppUrl()}/learn/dashboard" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Go to Academy Dashboard</a>
+        </div>
+        <p>Happy Learning,<br>The CodeOps Pro Team</p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Failed to send new lesson email:", error);
+  }
+}
+
+export async function sendNewTaskEmail({
+  studentName,
+  studentEmail,
+  courseTitle,
+  taskTitle,
+  dueDate,
+}: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  taskTitle: string;
+  dueDate: Date | null;
+}) {
+  const dueDateStr = dueDate ? new Date(dueDate).toLocaleDateString() : "No deadline";
+  
+  const mailOptions = {
+    from: '"CodeOps Pro" <sajidrehman.dev@gmail.com>',
+    to: resolveEmail(studentEmail),
+    subject: `New Task Assigned in ${courseTitle}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #4f46e5; text-align: center;">New Task Assigned! 📝</h2>
+        <p>Hi ${studentName},</p>
+        <p>A new task titled <strong>"${taskTitle}"</strong> has been assigned to you in the course <strong>${courseTitle}</strong>.</p>
+        <p><strong>Deadline:</strong> <span style="color: #ef4444; font-weight: bold;">${dueDateStr}</span></p>
+        <p>Please make sure to complete it on time to maintain your streak!</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${getAppUrl()}/learn/dashboard/tasks" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Tasks</a>
+        </div>
+        <p>Best regards,<br>The CodeOps Pro Team</p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Failed to send new task email:", error);
+  }
+}
+
 
