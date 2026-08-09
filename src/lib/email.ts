@@ -12,6 +12,8 @@ const transporter = nodemailer.createTransport({
 
 const getAppUrl = () => process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://codeopspro.vercel.app";
 
+const resolveEmail = (email: string) => email === "sajid@codeopspro.com" ? "sajidrehman.dev@gmail.com" : email;
+
 const getHeader = (title?: string) => `
 <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 24px; text-align: center;">
@@ -82,8 +84,8 @@ export async function sendNewApplicationEmail({
 
   try {
     await transporter.sendMail({
-      from: `Hiring Portal <${process.env.GMAIL_USER}>`,
-      to: adminEmail,
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(adminEmail),
       subject: interpolate(template.subject, variables),
       html: getHeader("🎯 New Application Received") + interpolate(template.body, variables) + getFooter(),
     });
@@ -119,8 +121,8 @@ export async function sendCandidateConfirmationEmail({
 
   try {
     await transporter.sendMail({
-      from: `Hiring Portal <${process.env.GMAIL_USER}>`,
-      to: candidateEmail,
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(candidateEmail),
       subject: interpolate(template.subject, variables),
       html: getHeader() + interpolate(template.body, variables) + getFooter(),
     });
@@ -201,8 +203,8 @@ export async function sendStageChangeEmail({
 
   try {
     await transporter.sendMail({
-      from: `Hiring Portal <${process.env.GMAIL_USER}>`,
-      to: candidateEmail,
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(candidateEmail),
       subject: interpolate(template.subject, variables),
       html: getHeader(title) + interpolate(template.body, variables) + getFooter(),
     });
@@ -246,8 +248,8 @@ export async function sendTaskExtensionEmail({
 
   try {
     await transporter.sendMail({
-      from: `Hiring Portal <${process.env.GMAIL_USER}>`,
-      to: studentEmail,
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(studentEmail),
       subject: defaultSubject,
       html: getHeader("🕒 Deadline Extended") + interpolate(defaultBody, variables) + getFooter(),
     });
@@ -255,3 +257,106 @@ export async function sendTaskExtensionEmail({
     console.error("Failed to send task extension email:", error);
   }
 }
+
+export async function sendDeadlineWarningEmail({
+  studentName,
+  studentEmail,
+  taskTitle,
+  courseTitle,
+  dueDate,
+}: {
+  studentName: string;
+  studentEmail: string;
+  taskTitle: string;
+  courseTitle: string;
+  dueDate: Date;
+}) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
+
+  const variables = {
+    studentName: studentName || "Student",
+    taskTitle,
+    courseTitle,
+    dueDate: dueDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+    link: `${getAppUrl()}/learn/dashboard`
+  };
+
+  const defaultSubject = `Action Required: Upcoming Deadline for ${taskTitle}`;
+  const defaultBody = `
+    <div style="background: #fff0f2; border-left: 4px solid #ef4444; border-radius: 4px; padding: 16px; margin-bottom: 20px;">
+      <h2 style="margin: 0 0 8px 0; color: #991b1b; font-size: 18px;">⚠️ Deadline Approaching</h2>
+      <p style="margin: 0; color: #7f1d1d; font-size: 14px;">Your assignment is due soon. Failure to submit may result in being dropped from the course.</p>
+    </div>
+    <p>Dear {{studentName}},</p>
+    <p>This is an automated reminder that the deadline for your assignment <strong>{{taskTitle}}</strong> in the course <strong>{{courseTitle}}</strong> is quickly approaching.</p>
+    <p><strong>Due Date:</strong> {{dueDate}}</p>
+    <p>It is important that you submit your work before the deadline. Please log in to your dashboard to complete the task.</p>
+    <br/>
+    <a href="{{link}}" style="display: inline-block; background: #ef4444; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Go to Dashboard &rarr;</a>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(studentEmail),
+      subject: defaultSubject,
+      html: getHeader("⚠️ Action Required") + interpolate(defaultBody, variables) + getFooter(),
+    });
+  } catch (error) {
+    console.error("Failed to send deadline warning email:", error);
+  }
+}
+
+export async function sendCongratulationsEmail({
+  studentName,
+  studentEmail,
+  taskTitle,
+  courseTitle,
+  marks,
+  maxMarks,
+}: {
+  studentName: string;
+  studentEmail: string;
+  taskTitle: string;
+  courseTitle: string;
+  marks: number;
+  maxMarks: number;
+}) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
+
+  const variables = {
+    studentName: studentName || "Student",
+    taskTitle,
+    courseTitle,
+    marks: marks.toString(),
+    maxMarks: maxMarks.toString(),
+    link: `${getAppUrl()}/learn/dashboard`
+  };
+
+  const defaultSubject = `Congratulations! Assignment Graded: ${taskTitle}`;
+  const defaultBody = `
+    <div style="background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 4px; padding: 16px; margin-bottom: 20px;">
+      <h2 style="margin: 0 0 8px 0; color: #14532d; font-size: 18px;">🎉 Great Job!</h2>
+      <p style="margin: 0; color: #166534; font-size: 14px;">Your assignment has been successfully submitted and graded.</p>
+    </div>
+    <p>Dear {{studentName}},</p>
+    <p>Congratulations! Your assignment <strong>{{taskTitle}}</strong> for the course <strong>{{courseTitle}}</strong> has been graded.</p>
+    <p style="font-size: 18px; font-weight: bold; color: #0f172a;">You scored: <span style="color: #22c55e;">{{marks}} / {{maxMarks}}</span></p>
+    <p>Keep up the excellent work! You can view the full details and feedback by logging into your dashboard.</p>
+    <br/>
+    <a href="{{link}}" style="display: inline-block; background: #22c55e; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Go to Dashboard &rarr;</a>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(studentEmail),
+      subject: defaultSubject,
+      html: getHeader("🎉 Assignment Graded") + interpolate(defaultBody, variables) + getFooter(),
+    });
+  } catch (error) {
+    console.error("Failed to send congratulations email:", error);
+  }
+}
+
+

@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Careers — CodeOps Hiring Portal",
+  title: "Careers — CodeOps Pro",
   description:
     "Browse our open positions and find your next career opportunity. Join our team of talented professionals.",
 };

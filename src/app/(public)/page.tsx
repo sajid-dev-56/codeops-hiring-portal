@@ -60,7 +60,13 @@ const getFeaturedCourses = unstable_cache(
       where: { isPublished: true },
       take: 3,
       orderBy: { createdAt: "desc" },
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        category: true,
+        difficulty: true,
         _count: {
           select: { lessons: true }
         }

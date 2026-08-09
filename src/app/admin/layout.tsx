@@ -131,7 +131,7 @@ export default function AdminLayout({
           <Link href="/admin" className="flex items-center gap-3">
             <Image src="/logo.png" alt="CodeOps Pro Logo" width={48} height={48} priority fetchPriority="high" className="h-12 w-auto object-contain " />
             <div>
-              <h1 className="font-bold text-lg leading-tight">CodeOps Hiring Portal</h1>
+              <h1 className="font-bold text-lg leading-tight">CodeOps Pro</h1>
               <p className="text-xs text-surface-400">Admin Portal</p>
             </div>
           </Link>

@@ -13,15 +13,15 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   metadataBase: new URL("https://codeopspro.vercel.app"),
   title: {
-    default: "CodeOps Hiring Portal",
-    template: "%s | CodeOps Hiring Portal",
+    default: "CodeOps Pro",
+    template: "%s | CodeOps Pro",
   },
   description:
     "Browse open positions and apply to join our team. We're looking for talented individuals who are passionate about building great products.",
   keywords: ["careers", "jobs", "hiring", "apply", "work with us", "CodeOps Pro"],
   openGraph: {
-    title: "CodeOps Hiring Portal",
-    description: "Browse open positions and apply to join our team.",
+    title: "CodeOps Pro",
+    description: "Browse open positions, apply to join our team, and explore our learning academy.",
     url: "https://codeopspro.vercel.app",
     siteName: "CodeOps Pro",
     images: [
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CodeOps Hiring Portal",
-    description: "Browse open positions and apply to join our team.",
+    title: "CodeOps Pro",
+    description: "Browse open positions, apply to join our team, and explore our learning academy.",
     images: ["/logo.png"],
   },
   verification: {

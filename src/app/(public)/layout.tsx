@@ -17,7 +17,7 @@ export default function PublicLayout({
             <Link href="/" className="flex items-center gap-2">
               <Image src="/logo.png" alt="CodeOps Pro Logo" width={48} height={48} priority fetchPriority="high" className="h-12 w-auto object-contain " />
               <span className="font-bold text-lg text-surface-900 dark:text-white transition-colors duration-300">
-                <span className="hidden sm:inline">CodeOps Hiring Portal</span>
+                <span className="hidden sm:inline">CodeOps Pro</span>
                 <span className="sm:hidden">CodeOps</span>
               </span>
             </Link>
@@ -27,6 +27,12 @@ export default function PublicLayout({
                 className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Careers
+              </Link>
+              <Link
+                href="/learn"
+                className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                Academy
               </Link>
               <Link
                 href="/login"
@@ -51,7 +57,7 @@ export default function PublicLayout({
             <div className="flex items-center gap-2">
               <Image src="/logo.png" alt="CodeOps Pro Logo" width={24} height={24} className="h-6 w-auto object-contain grayscale opacity-70 " />
               <span className="text-sm text-surface-500 dark:text-surface-400">
-                © {new Date().getFullYear()} CodeOps Hiring Portal. All rights reserved.
+                © {new Date().getFullYear()} CodeOps Pro. All rights reserved.
               </span>
             </div>
             <div className="flex items-center gap-4 text-sm text-surface-400 dark:text-surface-500">
