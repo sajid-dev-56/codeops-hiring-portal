@@ -2,11 +2,11 @@
   <br>
   <img src="./public/logo.png" alt="CodeOps Pro Logo" width="80" />
   <br>
-  CodeOps Hiring Portal
+  CodeOps Pro
   <br>
 </h1>
 
-<h4 align="center">An AI-powered, full-stack Applicant Tracking System that automates resume screening with Google Gemini, streamlines multi-stage hiring pipelines, and delivers a real-time candidate experience — built for modern HR teams who refuse to settle for spreadsheets.</h4>
+<h4 align="center">An AI-powered, full-stack platform featuring a smart Applicant Tracking System for modern HR teams, and a comprehensive Learning Academy with automated workflows.</h4>
 
 <p align="center">
   <a href="https://codeopspro.vercel.app" target="_blank"><img src="https://img.shields.io/badge/🚀_LIVE_DEMO-codeopspro.vercel.app-6366f1?style=for-the-badge&labelColor=1e1b4b" alt="Live Demo" /></a>
@@ -33,13 +33,12 @@
 
 **Hiring is broken for small-to-medium tech companies.** Most teams still juggle between email threads, Google Sheets, and calendar apps to manage candidates — leading to missed follow-ups, biased screening, and weeks-long hiring cycles. Enterprise ATS tools like Greenhouse or Lever cost $6,000+/year and are overkill for growing teams.
 
-**CodeOps Hiring Portal** solves this by providing a **free, open-source, AI-first hiring platform** where:
+**CodeOps Pro** solves this by providing a **free, open-source, AI-first platform** combining both hiring and learning:
 
-- **HR Managers & Recruiters** get an intelligent admin dashboard with drag-and-drop pipeline management, AI-scored candidates, and automated email workflows — no more manually reading 200 resumes.
-- **Candidates** get a dedicated portal to track their application status in real-time, message the hiring team directly, and view interview schedules — no more "we'll get back to you" black holes.
-- **Founders & CTOs** get instant visibility into their hiring funnel with analytics dashboards showing pipeline health, stage distribution, and team velocity.
+- **CodeOps Careers (For HR & Candidates):** An intelligent admin dashboard with drag-and-drop pipelines, AI-scored candidates, and a real-time tracking portal for applicants.
+- **CodeOps Academy (For Students):** A comprehensive learning management system with course progression, automated deadline reminders, and an integrated mentor chatbot.
 
-> **Who is this for?** Startups, software agencies, and any tech team that needs a professional hiring workflow without the enterprise price tag.
+> **Who is this for?** Startups, software agencies, and any tech team that needs a professional hiring and learning workflow without the enterprise price tag.
 
 ---
 
@@ -79,6 +78,15 @@ Use these credentials to explore the full admin dashboard:
 | **📋 Custom Questions** | Add custom screening questions per job posting that candidates must answer |
 | **🗑️ Candidate Management** | View, filter, update stage, delete candidates, and add internal notes |
 | **🎨 Email Template Editor** | Customize all automated email templates with variable interpolation ({{candidateName}}, {{jobTitle}}, etc.) |
+
+### 🎓 For Students (CodeOps Academy)
+| Feature | Description |
+|---------|-------------|
+| **📚 Course Catalog** | Browse featured courses and view detailed curricula |
+| **🎯 Learning Dashboard** | Track daily goals, overall progress, and recent announcements |
+| **⏳ Automated Reminders** | **Vercel Cron Jobs** automatically send email warnings 1 day before assignment deadlines |
+| **🤖 Mentor Chat Widget** | AI chatbot to assist students with course-related doubts |
+| **🏆 Leaderboards** | Gamified learning experience to compete with other students |
 
 ### 👤 For Candidates
 | Feature | Description |
@@ -228,6 +236,7 @@ const responseSchema = {
 | **Upstash Redis** | Distributed rate limiting in production |
 | **Nodemailer + Gmail SMTP** | Transactional email delivery |
 | **Vercel Analytics** | Performance monitoring and web analytics |
+| **Vercel Cron Jobs** | Scheduled automated tasks for sending deadline reminders |
 | **Zod** | Runtime schema validation for forms and API inputs |
 
 ---
