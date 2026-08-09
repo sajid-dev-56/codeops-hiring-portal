@@ -14,13 +14,12 @@ export async function POST(
 
     const { id } = await params;
     
-    // Check if attempt already exists
-    const existingAttempt = await prisma.quizAttempt.findUnique({
+    // Check if an ongoing attempt already exists
+    const existingAttempt = await prisma.quizAttempt.findFirst({
       where: {
-        quizId_userId: {
-          quizId: id,
-          userId: session.user.id,
-        },
+        quizId: id,
+        userId: session.user.id,
+        status: "PENDING",
       },
     });
 

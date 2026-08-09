@@ -36,13 +36,23 @@ export async function POST(
 
     const scorePercentage = Math.round((score / quiz.questions.length) * 100);
 
+    // Find the pending attempt
+    const pendingAttempt = await prisma.quizAttempt.findFirst({
+      where: {
+        quizId: id,
+        userId: session.user.id,
+        status: "PENDING",
+      },
+    });
+
+    if (!pendingAttempt) {
+      return NextResponse.json({ error: "No pending attempt found" }, { status: 400 });
+    }
+
     // Update Attempt
     const attempt = await prisma.quizAttempt.update({
       where: {
-        quizId_userId: {
-          quizId: id,
-          userId: session.user.id,
-        },
+        id: pendingAttempt.id,
       },
       data: {
         score: scorePercentage,

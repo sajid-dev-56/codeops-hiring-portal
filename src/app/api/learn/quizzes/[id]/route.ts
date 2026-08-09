@@ -32,3 +32,32 @@ export async function DELETE(
     return NextResponse.json({ error: "Failed to delete quiz" }, { status: 500 });
   }
 }
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await params;
+    const { status } = await req.json();
+
+    if (!["SCHEDULED", "OPEN", "CLOSED"].includes(status)) {
+      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    }
+
+    const quiz = await prisma.quiz.update({
+      where: { id },
+      data: { status },
+    });
+
+    return NextResponse.json(quiz);
+  } catch (error) {
+    console.error("Failed to update quiz:", error);
+    return NextResponse.json({ error: "Failed to update quiz" }, { status: 500 });
+  }
+}

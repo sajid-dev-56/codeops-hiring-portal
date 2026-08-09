@@ -189,6 +189,7 @@ model Quiz {
   timeLimit   Int      @default(20) // in seconds per question
   startTime   DateTime?
   endTime     DateTime?
+  status      String   @default("SCHEDULED") // SCHEDULED, OPEN, CLOSED
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   
@@ -220,8 +221,6 @@ model QuizAttempt {
 
   quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([quizId, userId])
 }
 
 model Enrollment {

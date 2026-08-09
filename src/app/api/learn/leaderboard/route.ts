@@ -17,14 +17,16 @@ export async function GET() {
       },
     });
 
-    // Get all graded quiz attempts grouped by user
+    // Get all graded quiz attempts grouped by user (order by most recent)
     const quizAttempts = await prisma.quizAttempt.findMany({
       where: {
         status: "GRADED",
         score: { not: null },
       },
+      orderBy: { completedAt: 'desc' },
       select: {
         userId: true,
+        quizId: true,
         score: true,
         user: { select: { name: true } },
       },
@@ -50,7 +52,15 @@ export async function GET() {
       }
     }
 
+    const processedUserQuizzes = new Set<string>();
+
     for (const attempt of quizAttempts) {
+      const userQuizKey = `${attempt.userId}-${attempt.quizId}`;
+      if (processedUserQuizzes.has(userQuizKey)) {
+        continue; // Skip older attempts for the same quiz
+      }
+      processedUserQuizzes.add(userQuizKey);
+
       const existing = userMarksMap.get(attempt.userId);
       if (existing) {
         existing.totalMarks += attempt.score || 0;

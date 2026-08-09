@@ -102,8 +102,19 @@ export default async function StudentQuizzesPage() {
               }
 
               const now = new Date();
-              const isUpcoming = quiz.startTime && new Date(quiz.startTime) > now;
-              const isClosed = quiz.endTime && new Date(quiz.endTime) < now;
+              let isUpcoming = false;
+              let isClosed = false;
+
+              if (quiz.status === "CLOSED") {
+                isClosed = true;
+              } else if (quiz.status === "SCHEDULED") {
+                if (quiz.startTime && new Date(quiz.startTime) > now) {
+                  isUpcoming = true;
+                } else if (quiz.endTime && new Date(quiz.endTime) < now) {
+                  isClosed = true;
+                }
+              }
+
               const isLocked = isUpcoming || isClosed;
               
               if (isUpcoming) {
