@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 // GET /api/learn/leaderboard — global student leaderboard
 export async function GET() {
   try {
-    // Get all graded submissions grouped by user
+    // Get all graded task submissions grouped by user
     const submissions = await prisma.taskSubmission.findMany({
       where: {
         status: "GRADED",
@@ -13,13 +13,24 @@ export async function GET() {
       select: {
         userId: true,
         marks: true,
-        user: {
-          select: { name: true },
-        },
+        user: { select: { name: true } },
       },
     });
 
-    // Aggregate marks per user
+    // Get all graded quiz attempts grouped by user
+    const quizAttempts = await prisma.quizAttempt.findMany({
+      where: {
+        status: "GRADED",
+        score: { not: null },
+      },
+      select: {
+        userId: true,
+        score: true,
+        user: { select: { name: true } },
+      },
+    });
+
+    // Aggregate marks/scores per user
     const userMarksMap = new Map<
       string,
       { name: string; totalMarks: number; tasksCompleted: number }
@@ -34,6 +45,20 @@ export async function GET() {
         userMarksMap.set(sub.userId, {
           name: sub.user.name || "Anonymous",
           totalMarks: sub.marks || 0,
+          tasksCompleted: 1,
+        });
+      }
+    }
+
+    for (const attempt of quizAttempts) {
+      const existing = userMarksMap.get(attempt.userId);
+      if (existing) {
+        existing.totalMarks += attempt.score || 0;
+        existing.tasksCompleted += 1; // Count quiz completion as a task
+      } else {
+        userMarksMap.set(attempt.userId, {
+          name: attempt.user.name || "Anonymous",
+          totalMarks: attempt.score || 0,
           tasksCompleted: 1,
         });
       }
