@@ -41,7 +41,7 @@ export async function GET(request: Request) {
       },
     });
 
-    let emailsSent = 0;
+    const emailPromises: Promise<any>[] = [];
 
     // 3. Process each task and check enrollments
     for (const task of upcomingTasks) {
@@ -55,22 +55,25 @@ export async function GET(request: Request) {
           const user = enrollment.user;
           
           if (user.email) {
-            await sendDeadlineWarningEmail({
-              studentName: user.name || "Student",
-              studentEmail: user.email,
-              taskTitle: task.title,
-              courseTitle: task.course.title,
-              dueDate: task.dueDate,
-            });
-            emailsSent++;
+            emailPromises.push(
+              sendDeadlineWarningEmail({
+                studentName: user.name || "Student",
+                studentEmail: user.email,
+                taskTitle: task.title,
+                courseTitle: task.course.title,
+                dueDate: task.dueDate,
+              })
+            );
           }
         }
       }
     }
 
+    await Promise.allSettled(emailPromises);
+
     return NextResponse.json({
       success: true,
-      message: `Checked ${upcomingTasks.length} tasks. Sent ${emailsSent} reminder emails.`,
+      message: `Checked ${upcomingTasks.length} tasks. Sent ${emailPromises.length} reminder emails.`,
     });
   } catch (error: any) {
     console.error("Cron Error (Deadline Reminders):", error);

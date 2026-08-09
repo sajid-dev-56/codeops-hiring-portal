@@ -10,7 +10,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const getAppUrl = () => process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://codeopspro.vercel.app";
+const getAppUrl = () => {
+  if (process.env.NODE_ENV === "production") return "https://codeopspro.vercel.app";
+  return process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://codeopspro.vercel.app";
+};
 
 const resolveEmail = (email: string) => email === "sajid@codeopspro.com" ? "sajidrehman.dev@gmail.com" : email;
 
