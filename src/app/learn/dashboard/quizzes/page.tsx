@@ -101,12 +101,23 @@ export default async function StudentQuizzesPage() {
                 statusColor = "text-warning-600 dark:text-warning-400";
               }
 
+              const now = new Date();
+              const isUpcoming = quiz.startTime && new Date(quiz.startTime) > now;
+              const isClosed = quiz.endTime && new Date(quiz.endTime) < now;
+              const isLocked = isUpcoming || isClosed;
+              
+              if (isUpcoming) {
+                statusLabel = `Opens at ${new Date(quiz.startTime!).toLocaleString()}`;
+                statusBg = "bg-primary-500/10";
+                statusColor = "text-primary-600 dark:text-primary-400";
+              } else if (isClosed && !attempt) {
+                statusLabel = "Closed";
+                statusBg = "bg-surface-500/10";
+                statusColor = "text-surface-600 dark:text-surface-400";
+              }
+
               return (
-                <Link
-                  key={quiz.id}
-                  href={`/learn/dashboard/courses/${quiz.course.slug}/quiz/${quiz.id}`}
-                  className="group block hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors p-6"
-                >
+                <div key={quiz.id} className={`group block p-6 ${isLocked ? 'opacity-75 cursor-not-allowed' : 'hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors'}`}>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
@@ -141,12 +152,20 @@ export default async function StudentQuizzesPage() {
                     </div>
                     
                     <div className="flex items-center justify-end sm:justify-start">
-                      <div className="w-10 h-10 rounded-xl bg-surface-100 dark:bg-surface-800 flex items-center justify-center group-hover:bg-primary-50 dark:group-hover:bg-primary-500/10 group-hover:scale-110 transition-all duration-200">
-                        <ChevronRight className="w-5 h-5 text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
-                      </div>
+                      {isLocked ? (
+                        <div className="w-10 h-10 rounded-xl bg-surface-100 dark:bg-surface-800 flex items-center justify-center">
+                          <span className="text-surface-400 text-xs font-bold uppercase">Locked</span>
+                        </div>
+                      ) : (
+                        <Link href={`/learn/dashboard/courses/${quiz.course.slug}/quiz/${quiz.id}`}>
+                          <div className="w-10 h-10 rounded-xl bg-surface-100 dark:bg-surface-800 flex items-center justify-center group-hover:bg-primary-50 dark:group-hover:bg-primary-500/10 group-hover:scale-110 transition-all duration-200">
+                            <ChevronRight className="w-5 h-5 text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
+                          </div>
+                        </Link>
+                      )}
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

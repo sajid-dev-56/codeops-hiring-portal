@@ -436,4 +436,45 @@ export async function sendNewTaskEmail({
   }
 }
 
+export async function sendQuizScheduledEmail({
+  studentName,
+  studentEmail,
+  courseTitle,
+  quizTitle,
+  startTime,
+}: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  quizTitle: string;
+  startTime: Date | null;
+}) {
+  const startTimeStr = startTime ? new Date(startTime).toLocaleString() : "Immediately";
+  
+  const mailOptions = {
+    from: '"CodeOps Pro" <sajidrehman.dev@gmail.com>',
+    to: resolveEmail(studentEmail),
+    subject: `New Quiz Scheduled in ${courseTitle}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #4f46e5; text-align: center;">New Quiz Scheduled! ⏱️</h2>
+        <p>Hi ${studentName},</p>
+        <p>A new quiz titled <strong>"${quizTitle}"</strong> has been scheduled in your course <strong>${courseTitle}</strong>.</p>
+        <p><strong>Start Time:</strong> <span style="color: #10b981; font-weight: bold;">${startTimeStr}</span></p>
+        <p>Make sure to be ready on time!</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${getAppUrl()}/learn/dashboard/quizzes" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Quizzes Dashboard</a>
+        </div>
+        <p>Best regards,<br>The CodeOps Pro Team</p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Failed to send quiz scheduled email:", error);
+  }
+}
+
 

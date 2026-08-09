@@ -20,6 +20,8 @@ export default function AddQuizForm({ courseId }: { courseId: string }) {
       title: formData.get("title"),
       description: formData.get("description"),
       timeLimit: formData.get("timeLimit"),
+      startTime: formData.get("startTime") || null,
+      endTime: formData.get("endTime") || null,
     };
 
     try {
@@ -91,6 +93,25 @@ export default function AddQuizForm({ courseId }: { courseId: string }) {
             className="w-full px-3 py-2 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-700 rounded-lg text-sm text-surface-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
             placeholder="20"
           />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Start Time (Optional)</label>
+            <input
+              type="datetime-local"
+              name="startTime"
+              className="w-full px-3 py-2 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-700 rounded-lg text-sm text-surface-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">End Time (Optional)</label>
+            <input
+              type="datetime-local"
+              name="endTime"
+              className="w-full px-3 py-2 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-700 rounded-lg text-sm text-surface-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
+            />
+          </div>
         </div>
 
         {error && <p className="text-xs text-danger-500">{error}</p>}

@@ -187,6 +187,8 @@ model Quiz {
   title       String
   description String?
   timeLimit   Int      @default(20) // in seconds per question
+  startTime   DateTime?
+  endTime     DateTime?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   

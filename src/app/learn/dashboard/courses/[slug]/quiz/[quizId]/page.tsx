@@ -45,6 +45,39 @@ export default async function StudentQuizPage({ params }: Props) {
 
   const attempt = quiz.attempts[0];
 
+  const now = new Date();
+  if (quiz.startTime && quiz.startTime > now) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 text-center space-y-6">
+        <h1 className="text-3xl font-bold text-surface-900 dark:text-white">Quiz Locked</h1>
+        <p className="text-surface-500">This quiz opens on {quiz.startTime.toLocaleString()}</p>
+        <Link 
+          href={`/learn/dashboard/courses/${slug}`}
+          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-xl transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Course
+        </Link>
+      </div>
+    );
+  }
+
+  if (quiz.endTime && quiz.endTime < now && attempt?.status !== "GRADED") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 text-center space-y-6">
+        <h1 className="text-3xl font-bold text-surface-900 dark:text-white">Quiz Closed</h1>
+        <p className="text-surface-500">This quiz is no longer accepting submissions.</p>
+        <Link 
+          href={`/learn/dashboard/courses/${slug}`}
+          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-xl transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Course
+        </Link>
+      </div>
+    );
+  }
+
   if (attempt?.status === "GRADED") {
     return (
       <div className="max-w-2xl mx-auto py-12 px-4 animate-fade-in text-center space-y-6">

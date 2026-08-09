@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { sendQuizScheduledEmail } from "@/lib/email";
 
 export async function GET(
   req: NextRequest,
@@ -47,9 +48,33 @@ export async function POST(
         title: body.title,
         description: body.description || null,
         timeLimit: parseInt(body.timeLimit) || 20,
+        startTime: body.startTime ? new Date(body.startTime) : null,
+        endTime: body.endTime ? new Date(body.endTime) : null,
         order: body.order ?? (lastQuiz ? lastQuiz.order + 1 : 0),
       },
+      include: {
+        course: true
+      }
     });
+
+    if (quiz.startTime) {
+      // Fetch enrolled students
+      const enrollments = await prisma.enrollment.findMany({
+        where: { courseId: id },
+        include: { user: true }
+      });
+
+      // Send email to all students
+      for (const enrollment of enrollments) {
+        await sendQuizScheduledEmail({
+          studentName: enrollment.user.name || "Student",
+          studentEmail: enrollment.user.email || "",
+          courseTitle: quiz.course.title,
+          quizTitle: quiz.title,
+          startTime: quiz.startTime,
+        });
+      }
+    }
 
     return NextResponse.json(quiz, { status: 201 });
   } catch (error) {
