@@ -16,7 +16,19 @@ async function LeaderboardData() {
     },
   });
 
+  const quizAttempts = await prisma.quizAttempt.findMany({
+    where: { status: "GRADED", score: { not: null } },
+    orderBy: { completedAt: "desc" },
+    select: {
+      userId: true,
+      quizId: true,
+      score: true,
+      user: { select: { name: true } },
+    },
+  });
+
   const userMarksMap = new Map<string, { name: string; totalMarks: number; tasksCompleted: number }>();
+  
   for (const sub of submissions) {
     const existing = userMarksMap.get(sub.userId);
     if (existing) {
@@ -26,6 +38,28 @@ async function LeaderboardData() {
       userMarksMap.set(sub.userId, {
         name: sub.user.name || "Anonymous",
         totalMarks: sub.marks || 0,
+        tasksCompleted: 1,
+      });
+    }
+  }
+
+  const processedUserQuizzes = new Set<string>();
+
+  for (const attempt of quizAttempts) {
+    const userQuizKey = `${attempt.userId}-${attempt.quizId}`;
+    if (processedUserQuizzes.has(userQuizKey)) {
+      continue; 
+    }
+    processedUserQuizzes.add(userQuizKey);
+
+    const existing = userMarksMap.get(attempt.userId);
+    if (existing) {
+      existing.totalMarks += attempt.score || 0;
+      existing.tasksCompleted += 1;
+    } else {
+      userMarksMap.set(attempt.userId, {
+        name: attempt.user.name || "Anonymous",
+        totalMarks: attempt.score || 0,
         tasksCompleted: 1,
       });
     }
