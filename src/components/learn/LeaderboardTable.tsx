@@ -81,9 +81,9 @@ export default function LeaderboardTable({
             {/* Score */}
             <div className="flex-shrink-0 text-right">
               <div className="text-xl font-bold text-surface-900 dark:text-white">
-                {entry.totalMarks}
+                {entry.totalMarks}%
               </div>
-              <div className="text-xs text-surface-500 dark:text-surface-400">points</div>
+              <div className="text-xs text-surface-500 dark:text-surface-400">overall score</div>
             </div>
           </div>
         );

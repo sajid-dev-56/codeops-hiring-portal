@@ -74,14 +74,25 @@ async function LeaderboardData() {
     enrollmentMap.set(e.userId, e._count.courseId);
   }
 
+  // Calculate platform total possible marks
+  const totalTaskMarksResult = await prisma.task.aggregate({ _sum: { maxMarks: true } });
+  const totalQuizzesCount = await prisma.quiz.count();
+  const totalPlatformMarks = (totalTaskMarksResult._sum.maxMarks || 0) + (totalQuizzesCount * 100);
+
   const leaderboard = Array.from(userMarksMap.entries())
-    .map(([userId, data]) => ({
-      userId,
-      name: data.name,
-      totalMarks: data.totalMarks,
-      tasksCompleted: data.tasksCompleted,
-      coursesEnrolled: enrollmentMap.get(userId) || 0,
-    }))
+    .map(([userId, data]) => {
+      const percentage = totalPlatformMarks > 0 
+        ? Math.round((data.totalMarks / totalPlatformMarks) * 100) 
+        : 0;
+
+      return {
+        userId,
+        name: data.name,
+        totalMarks: percentage, // Reusing totalMarks field but it represents percentage now
+        tasksCompleted: data.tasksCompleted,
+        coursesEnrolled: enrollmentMap.get(userId) || 0,
+      };
+    })
     .sort((a, b) => b.totalMarks - a.totalMarks)
     .map((entry, index) => ({ ...entry, rank: index + 1 }));
 
