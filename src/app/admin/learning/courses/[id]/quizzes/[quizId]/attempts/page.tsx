@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Search, CheckCircle2 } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
+import QuizAttemptsClient from "./QuizAttemptsClient";
 
 interface Props {
   params: Promise<{ id: string; quizId: string }>;
@@ -15,7 +16,7 @@ export default async function AdminQuizAttemptsPage({ params }: Props) {
     include: {
       course: true,
       attempts: {
-        include: { user: { select: { name: true, email: true } } },
+        include: { user: { select: { id: true, name: true, email: true } } },
         orderBy: { completedAt: "desc" },
       },
     },
@@ -48,69 +49,7 @@ export default async function AdminQuizAttemptsPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-surface-900 rounded-2xl border border-surface-200 dark:border-surface-800 overflow-hidden">
-        {quiz.attempts.length === 0 ? (
-          <div className="p-12 text-center text-surface-500">
-            No submissions found for this quiz yet.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-800/50">
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-surface-500">Student</th>
-                  <th className="text-center px-5 py-3 text-xs font-semibold uppercase tracking-wider text-surface-500">Score</th>
-                  <th className="text-center px-5 py-3 text-xs font-semibold uppercase tracking-wider text-surface-500">Strikes</th>
-                  <th className="text-center px-5 py-3 text-xs font-semibold uppercase tracking-wider text-surface-500">Status</th>
-                  <th className="text-right px-5 py-3 text-xs font-semibold uppercase tracking-wider text-surface-500">Submitted At</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-surface-100 dark:divide-surface-800">
-                {quiz.attempts.map((attempt) => (
-                  <tr key={attempt.id} className="hover:bg-surface-50 dark:hover:bg-surface-800/30 transition-colors">
-                    <td className="px-5 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-medium text-surface-900 dark:text-white">{attempt.user.name || "Anonymous"}</span>
-                        <span className="text-sm text-surface-500">{attempt.user.email}</span>
-                      </div>
-                    </td>
-                    <td className="px-5 py-4 text-center">
-                      <div className="flex items-center justify-center">
-                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-                          attempt.score !== null && attempt.score >= 50 
-                            ? 'bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400' 
-                            : 'bg-danger-100 text-danger-700 dark:bg-danger-900/30 dark:text-danger-400'
-                        }`}>
-                          {attempt.score !== null ? `${attempt.score}%` : 'N/A'}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-5 py-4 text-center">
-                      <span className={`text-sm font-medium ${attempt.strikes > 0 ? 'text-danger-500' : 'text-surface-500'}`}>
-                        {attempt.strikes}
-                      </span>
-                    </td>
-                    <td className="px-5 py-4 text-center">
-                       {attempt.status === "GRADED" ? (
-                          <div className="inline-flex items-center gap-1.5 text-success-600 dark:text-success-500 text-sm font-medium">
-                            <CheckCircle2 className="w-4 h-4" /> Graded
-                          </div>
-                       ) : (
-                          <div className="inline-flex items-center gap-1.5 text-surface-500 text-sm font-medium">
-                            <Search className="w-4 h-4" /> Pending
-                          </div>
-                       )}
-                    </td>
-                    <td className="px-5 py-4 text-right text-sm text-surface-600 dark:text-surface-400">
-                      {attempt.completedAt ? attempt.completedAt.toLocaleString() : 'In Progress'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <QuizAttemptsClient attempts={quiz.attempts} />
     </div>
   );
 }
