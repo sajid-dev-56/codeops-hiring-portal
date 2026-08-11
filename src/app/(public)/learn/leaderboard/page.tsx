@@ -79,7 +79,7 @@ async function LeaderboardData() {
   const totalQuizzesCount = await prisma.quiz.count();
   const totalPlatformMarks = (totalTaskMarksResult._sum.maxMarks || 0) + (totalQuizzesCount * 100);
 
-  const leaderboard = Array.from(userMarksMap.entries())
+  const sortedLeaderboard = Array.from(userMarksMap.entries())
     .map(([userId, data]) => {
       const percentage = totalPlatformMarks > 0 
         ? Math.round((data.totalMarks / totalPlatformMarks) * 100) 
@@ -88,13 +88,30 @@ async function LeaderboardData() {
       return {
         userId,
         name: data.name,
-        totalMarks: percentage, // Reusing totalMarks field but it represents percentage now
+        totalMarks: percentage,
         tasksCompleted: data.tasksCompleted,
         coursesEnrolled: enrollmentMap.get(userId) || 0,
       };
     })
-    .sort((a, b) => b.totalMarks - a.totalMarks)
-    .map((entry, index) => ({ ...entry, rank: index + 1 }));
+    .sort((a, b) => {
+      // Primary sort by marks/percentage descending
+      if (b.totalMarks !== a.totalMarks) {
+        return b.totalMarks - a.totalMarks;
+      }
+      // Secondary sort by name alphabetical
+      return a.name.localeCompare(b.name);
+    });
+
+  let currentRank = 1;
+  let previousScore = -1;
+
+  const leaderboard = sortedLeaderboard.map((entry, index) => {
+    if (entry.totalMarks !== previousScore) {
+      currentRank = index + 1;
+    }
+    previousScore = entry.totalMarks;
+    return { ...entry, rank: currentRank };
+  });
 
   return <LeaderboardTable entries={leaderboard} />;
 }
