@@ -221,6 +221,9 @@ model QuizAttempt {
 
   quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+  @@index([userId])
 }
 
 model Enrollment {

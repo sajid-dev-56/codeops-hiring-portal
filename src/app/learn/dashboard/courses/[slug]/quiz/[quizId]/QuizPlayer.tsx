@@ -54,7 +54,7 @@ export default function QuizPlayer({ quiz, courseSlug }: { quiz: any, courseSlug
         await document.exitFullscreen();
       }
       
-      router.refresh();
+      window.location.reload();
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);

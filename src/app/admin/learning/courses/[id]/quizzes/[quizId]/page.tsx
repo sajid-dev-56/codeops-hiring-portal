@@ -45,6 +45,13 @@ export default async function AdminQuizManagePage({ params }: Props) {
         </div>
         
         <div className="flex items-center gap-3">
+          <Link 
+            href={`/admin/learning/courses/${id}/quizzes/${quizId}/attempts`}
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 hover:bg-primary-100 dark:text-primary-300 dark:bg-primary-900/30 dark:hover:bg-primary-900/50 rounded-xl transition-colors"
+          >
+            <ListTodo className="w-4 h-4" />
+            View Attempts
+          </Link>
           <DeleteQuizButton quizId={quiz.id} courseId={quiz.courseId} />
         </div>
       </div>
