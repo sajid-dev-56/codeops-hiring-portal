@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BookOpen, Clock, Users, Signal } from "lucide-react";
 
 interface CourseCardProps {
@@ -43,10 +44,12 @@ export default function CourseCard({
         {/* Thumbnail / Gradient Header */}
         <div className="h-40 relative overflow-hidden bg-surface-100 dark:bg-surface-800">
           {thumbnail ? (
-            <img 
+            <Image 
               src={thumbnail} 
-              alt={title} 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="absolute inset-0 object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-primary-500/20 via-accent-500/20 to-primary-600/20 dark:from-primary-500/10 dark:via-accent-500/10 dark:to-primary-600/10" />
