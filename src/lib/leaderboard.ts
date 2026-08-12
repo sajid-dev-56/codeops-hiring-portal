@@ -20,7 +20,10 @@ export async function getGlobalLeaderboard() {
       status: "GRADED",
       score: { not: null },
     },
-    orderBy: { completedAt: 'desc' },
+    orderBy: [
+      { score: 'desc' },
+      { completedAt: 'desc' }
+    ],
     select: {
       userId: true,
       quizId: true,

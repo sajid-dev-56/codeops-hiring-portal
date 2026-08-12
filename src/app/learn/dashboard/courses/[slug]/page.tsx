@@ -42,6 +42,10 @@ export default async function EnrolledCoursePage({ params, searchParams }: Props
           questions: true,
           attempts: {
             where: { userId },
+            orderBy: [
+              { score: "desc" },
+              { completedAt: "desc" }
+            ],
           },
         },
       },
