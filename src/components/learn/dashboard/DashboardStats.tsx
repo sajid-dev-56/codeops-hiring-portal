@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { BookOpen, Trophy, CheckCircle2 } from "lucide-react";
+import { getGlobalLeaderboard } from "@/lib/leaderboard";
 
 export default async function DashboardStats({ userId }: { userId: string }) {
   // Get enrolled courses count
@@ -7,33 +8,19 @@ export default async function DashboardStats({ userId }: { userId: string }) {
     where: { userId },
   });
 
-  // Get submissions
   const submissions = await prisma.taskSubmission.findMany({
-    where: { userId },
-    select: { marks: true, status: true },
+    where: { userId, status: { in: ["PENDING", "AI_GRADED"] } },
   });
+  const tasksPending = submissions.length;
 
-  const totalMarks = submissions
-    .filter((s) => s.status === "GRADED" && s.marks !== null)
-    .reduce((sum, s) => sum + (s.marks || 0), 0);
-
-  const tasksCompleted = submissions.filter((s) => s.status === "GRADED").length;
-  const tasksPending = submissions.filter((s) => s.status === "PENDING" || s.status === "AI_GRADED").length;
-
-  // Optimize Rank Query: Avoid fetching ALL submissions. 
-  // We can just count how many users have MORE marks than this user.
-  // We can't do this with a simple count in Prisma if it requires grouping, but we can aggregate grouped sums.
-  const groupedMarks = await prisma.taskSubmission.groupBy({
-    by: ["userId"],
-    _sum: { marks: true },
-    where: { status: "GRADED", marks: { not: null } },
-  });
+  // Use the shared leaderboard logic so points and rank perfectly match the Leaderboard page
+  const leaderboard = await getGlobalLeaderboard();
+  const userStats = leaderboard.find((l) => l.userId === userId);
   
-  let rank = 0;
-  if (totalMarks > 0) {
-    const higherRanked = groupedMarks.filter((g) => (g._sum.marks || 0) > totalMarks).length;
-    rank = higherRanked + 1;
-  }
+  const totalMarks = userStats?.absoluteMarks || 0;
+  const percentage = userStats?.totalMarks || 0;
+  const tasksCompleted = userStats?.tasksCompleted || 0;
+  const rank = userStats?.rank || 0;
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
