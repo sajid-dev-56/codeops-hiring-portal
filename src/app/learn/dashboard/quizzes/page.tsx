@@ -41,6 +41,10 @@ export default async function StudentQuizzesPage() {
         where: {
           userId: session.user.id,
         },
+        orderBy: [
+          { score: "desc" },
+          { completedAt: "desc" }
+        ],
       },
     },
     orderBy: {
