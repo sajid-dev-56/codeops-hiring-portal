@@ -5,6 +5,11 @@ import { NextResponse } from "next/server";
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
+  const host = req.headers.get("host");
+  if (host && host.includes("vercel.app")) {
+    return new NextResponse("Website is only available on portal.codeopspro.com", { status: 404 });
+  }
+
   const { pathname } = req.nextUrl;
   const user = req.auth?.user;
 
@@ -79,5 +84,5 @@ function getRoleDashboard(role: string): string {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/candidate/:path*", "/learn/dashboard/:path*", "/instructor/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
