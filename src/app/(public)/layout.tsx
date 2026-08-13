@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { MobileNav } from "@/components/MobileNav";
 
 export default function PublicLayout({
   children,
@@ -21,27 +22,30 @@ export default function PublicLayout({
                 <span className="sm:hidden">CodeOps</span>
               </span>
             </Link>
-            <nav className="flex items-center gap-4 sm:gap-6">
-              <Link
-                href="/careers"
-                className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-              >
-                Careers
-              </Link>
-              <Link
-                href="/learn"
-                className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-              >
-                Academy
-              </Link>
-              <Link
-                href="/login"
-                className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-              >
-                Login Portal
-              </Link>
+            <nav className="flex items-center gap-2 sm:gap-6">
+              <div className="hidden sm:flex items-center gap-6">
+                <Link
+                  href="/careers"
+                  className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >
+                  Careers
+                </Link>
+                <Link
+                  href="/learn"
+                  className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >
+                  Academy
+                </Link>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >
+                  Login Portal
+                </Link>
+              </div>
               <div className="h-4 w-px bg-surface-200 dark:bg-surface-700 hidden sm:block"></div>
               <ThemeToggle />
+              <MobileNav />
             </nav>
           </div>
         </div>
