@@ -477,4 +477,99 @@ export async function sendQuizScheduledEmail({
   }
 }
 
+export async function sendCourseDroppedEmail({
+  studentName,
+  studentEmail,
+  courseTitle,
+  dropReason,
+}: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  dropReason?: string | null;
+}) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
 
+  const variables = {
+    studentName: studentName || "Student",
+    courseTitle,
+    reason: dropReason || "7+ days of inactivity (no assignment submissions, quiz attempts, or course progress)",
+    link: `${getAppUrl()}/learn/dashboard`,
+  };
+
+  const defaultSubject = `⚠️ Course Access Notice: ${courseTitle}`;
+  const defaultBody = `
+    <div style="background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+      <h2 style="margin: 0 0 8px 0; color: #991b1b; font-size: 18px;">🔒 Course Access Paused</h2>
+      <p style="margin: 0; color: #7f1d1d; font-size: 14px;">Your enrollment in <strong>{{courseTitle}}</strong> has been paused due to lack of recent progress.</p>
+    </div>
+    <p>Dear {{studentName}},</p>
+    <p>We noticed that you haven't been active in <strong>{{courseTitle}}</strong> for the past 7 days. As part of our learning commitment standards, inactive enrollments are temporarily paused.</p>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin: 16px 0;">
+      <p style="margin: 0; font-size: 14px; color: #475569;"><strong>Reason:</strong> {{reason}}</p>
+    </div>
+    <p><strong>Need to resume your studies?</strong></p>
+    <p>If you were facing unforeseen circumstances (e.g. university exams, health, technical hurdles) and wish to rejoin, you can submit a <strong>Reactivation Request</strong> directly from your dashboard.</p>
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="{{link}}" style="display: inline-block; background: #ef4444; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;">Open Dashboard & Request Access &rarr;</a>
+    </div>
+    <p style="font-size: 13px; color: #64748b;">Our instructor team will review your appeal and restore your access upon verification.</p>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(studentEmail),
+      subject: defaultSubject,
+      html: getHeader("⚠️ Course Access Notice") + interpolate(defaultBody, variables) + getFooter(),
+    });
+    console.log("✅ Course drop notice email sent to", studentEmail);
+  } catch (error) {
+    console.error("Failed to send course drop notice email:", error);
+  }
+}
+
+export async function sendCourseReactivatedEmail({
+  studentName,
+  studentEmail,
+  courseTitle,
+}: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+}) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
+
+  const variables = {
+    studentName: studentName || "Student",
+    courseTitle,
+    link: `${getAppUrl()}/learn/dashboard`,
+  };
+
+  const defaultSubject = `🎉 Course Access Restored: Welcome Back to ${courseTitle}!`;
+  const defaultBody = `
+    <div style="background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+      <h2 style="margin: 0 0 8px 0; color: #14532d; font-size: 18px;">✨ Access Reactivated!</h2>
+      <p style="margin: 0; color: #166534; font-size: 14px;">Your access to <strong>{{courseTitle}}</strong> has been successfully restored by the instructor.</p>
+    </div>
+    <p>Dear {{studentName}},</p>
+    <p>Great news! Your reactivation request has been approved. Your dashboard and course materials are now fully unlocked.</p>
+    <p>Make sure to jump back in, catch up on your tasks, and keep up your momentum!</p>
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="{{link}}" style="display: inline-block; background: #22c55e; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;">Go to Dashboard &rarr;</a>
+    </div>
+    <p style="font-size: 13px; color: #64748b;">Happy learning,<br>The CodeOps Pro Team</p>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `CodeOps Pro <${process.env.GMAIL_USER}>`,
+      to: resolveEmail(studentEmail),
+      subject: defaultSubject,
+      html: getHeader("🎉 Access Restored") + interpolate(defaultBody, variables) + getFooter(),
+    });
+    console.log("✅ Course reactivated email sent to", studentEmail);
+  } catch (error) {
+    console.error("Failed to send course reactivated email:", error);
+  }
+}

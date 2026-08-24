@@ -35,8 +35,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (!enrollment && session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "You must be enrolled in this course" }, { status: 403 });
+    if ((!enrollment || enrollment.status === "DROPPED") && session.user.role !== "ADMIN") {
+      return NextResponse.json({ 
+        error: enrollment?.status === "DROPPED"
+          ? "Your course access is locked due to inactivity. Please request reactivation from your dashboard."
+          : "You must be enrolled in this course" 
+      }, { status: 403 });
     }
 
     if (completed === false) {

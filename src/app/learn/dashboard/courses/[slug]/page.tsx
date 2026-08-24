@@ -75,6 +75,35 @@ export default async function EnrolledCoursePage({ params, searchParams }: Props
     );
   }
 
+  if (enrollment.status === "DROPPED" && session.user.role !== "ADMIN") {
+    return (
+      <div className="space-y-6 animate-fade-in py-12">
+        <div className="max-w-xl mx-auto bg-white dark:bg-surface-900 border border-red-500/30 rounded-3xl p-8 text-center shadow-xl shadow-red-500/5">
+          <div className="w-16 h-16 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-5 ring-8 ring-red-500/5">
+            <AlertTriangle className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-bold text-surface-900 dark:text-white mb-2">
+            Course Access Locked
+          </h2>
+          <p className="text-surface-500 dark:text-surface-400 text-sm mb-4 leading-relaxed">
+            Your enrollment in <strong>{course.title}</strong> has been paused due to inactivity (no task submissions, quiz attempts, or course progress for 7+ days).
+          </p>
+          {enrollment.dropReason && (
+            <div className="bg-surface-50 dark:bg-surface-800 rounded-xl p-3.5 text-xs text-surface-600 dark:text-surface-300 mb-6 italic">
+              &quot;{enrollment.dropReason}&quot;
+            </div>
+          )}
+          <Link
+            href="/learn/dashboard"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold shadow-lg shadow-red-500/20 transition-all"
+          >
+            Go to Dashboard & Request Reactivation
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   // Get lesson completions
   const completions = await prisma.lessonCompletion.findMany({
     where: { userId, lesson: { courseId: course.id } },

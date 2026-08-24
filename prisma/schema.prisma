@@ -30,6 +30,7 @@ model User {
   sessions          Session[]
   taskExtensions    TaskExtension[]
   taskSubmissions   TaskSubmission[]
+  reactivationRequests ReactivationRequest[]
 }
 
 model Account {
@@ -227,14 +228,22 @@ model QuizAttempt {
 }
 
 model Enrollment {
-  id         String   @id @default(cuid())
-  userId     String
-  courseId   String
-  enrolledAt DateTime @default(now())
-  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                   String                 @id @default(cuid())
+  userId               String
+  courseId             String
+  status               EnrollmentStatus       @default(ACTIVE)
+  enrolledAt           DateTime               @default(now())
+  droppedAt            DateTime?
+  dropReason           String?
+  reactivatedAt        DateTime?
+  course               Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reactivationRequests ReactivationRequest[]
 
   @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@index([status])
 }
 
 model Task {
@@ -386,4 +395,33 @@ enum AccountStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  DROPPED
+  COMPLETED
+}
+
+enum ReactivationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ReactivationRequest {
+  id           String             @id @default(cuid())
+  userId       String
+  enrollmentId String
+  reason       String
+  status       ReactivationStatus @default(PENDING)
+  adminNote    String?
+  createdAt    DateTime           @default(now())
+  resolvedAt   DateTime?
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollment   Enrollment         @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([enrollmentId])
+  @@index([status])
 }

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import DashboardActivityTracker from "@/components/learn/DashboardActivityTracker";
 import MentorChatWidget from "@/components/learn/MentorChatWidget";
+import DroppedAccessOverlay from "@/components/learn/DroppedAccessOverlay";
 
 const navItems = [
   {
@@ -198,6 +199,7 @@ export default function StudentDashboardLayout({
         <main className="p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
       <MentorChatWidget />
+      <DroppedAccessOverlay />
     </div>
   );
 }

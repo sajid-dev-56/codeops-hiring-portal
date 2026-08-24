@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 env-keys.txt
 
+# export data & logs
+exported_student_data/
+dev.log
+
