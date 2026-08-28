@@ -9,7 +9,7 @@
 <h4 align="center">An AI-powered, full-stack platform featuring a smart Applicant Tracking System for modern HR teams, and a comprehensive Learning Academy with automated workflows.</h4>
 
 <p align="center">
-  <a href="https://codeopspro.vercel.app" target="_blank"><img src="https://img.shields.io/badge/🚀_LIVE_DEMO-codeopspro.vercel.app-6366f1?style=for-the-badge&labelColor=1e1b4b" alt="Live Demo" /></a>
+  <a href="https://portal.codeopspro.com" target="_blank"><img src="https://img.shields.io/badge/🚀_LIVE_DEMO-codeopspro.vercel.app-6366f1?style=for-the-badge&labelColor=1e1b4b" alt="Live Demo" /></a>
   &nbsp;
   <img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js" alt="Next.js" />
   <img src="https://img.shields.io/badge/TypeScript-5-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
@@ -44,7 +44,7 @@
 
 ## 🌐 Live Demo
 
-### 🔗 **[https://codeopspro.vercel.app](https://codeopspro.vercel.app)**
+### 🔗 **[https://portal.codeopspro.com/](https://portal.codeopspro.com/)**
 
 The application is fully deployed and live on **Vercel** with a production PostgreSQL database on **Supabase**.
 
@@ -54,7 +54,7 @@ Use these credentials to explore the full admin dashboard:
 
 | Field    | Value                    |
 |----------|--------------------------|
-| **URL**  | [codeopspro.vercel.app/login](https://codeopspro.vercel.app/login) |
+| **URL**  | [https://portal.codeopspro.com/login](https://portal.codeopspro.com/login) |
 | **Email** | `..........`  |
 | **Password** | `......`         |
 
@@ -420,7 +420,7 @@ npx prisma db seed
 npm run dev
 ```
 
-The application will be available at **[http://localhost:3000](http://localhost:3000)**.
+The application will be available at **[https://portal.codeopspro.com/](https://portal.codeopspro.com/)**.
 
 ### Available Scripts
 
@@ -448,6 +448,6 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
   <br>
   <i>Full-stack developer passionate about building AI-powered solutions that solve real problems.</i>
   <br><br>
-  <a href="https://codeopspro.vercel.app">🌐 Live Demo</a> •
+  <a href="https://portal.codeopspro.com/">🌐 Live Demo</a> •
   <a href="https://github.com/sajid-dev-56/codeops-hiring-portal">📂 GitHub Repository</a>
 </p>
